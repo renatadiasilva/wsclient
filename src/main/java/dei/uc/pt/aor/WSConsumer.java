@@ -41,7 +41,12 @@ public class WSConsumer {
 				answer = "6";
 			}
 
-			int op = Integer.parseInt(answer);
+			int op = 1000;
+			try {
+				op = Integer.parseInt(answer);
+			} catch (Exception e) {
+				op = 1000;
+			}
 			// try catch
 			switch (op) {
 			case 1: 
