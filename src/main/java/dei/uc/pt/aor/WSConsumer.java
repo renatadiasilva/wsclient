@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -57,7 +56,7 @@ public class WSConsumer {
 				String email = "";
 				try {
 					email = reader.readLine();
-					getUserByEmail(email);  //no email
+					getUserByEmail(email);
 				} catch (IOException e) {
 					// usar log
 					e.printStackTrace();
@@ -69,10 +68,32 @@ public class WSConsumer {
 				System.out.println("Not implemented yet");
 				break;
 			case 4: 
-				createUser();
+				try {
+					System.out.println("Insert the name: ");
+					String name = reader.readLine();
+					System.out.println("Insert the email: ");
+					email = reader.readLine();
+					createUser(name, email);
+				} catch (IOException e) {
+					// usar log
+					e.printStackTrace();
+					stop = true;
+					answer = "6";
+				}
 				break;
 			case 5: 
-				System.out.println("Not implemented yet");
+				System.out.println("Insert the email: ");
+				email = "";
+				try {
+					email = reader.readLine();
+					//are you sure?
+					deleteUser(email);
+				} catch (IOException e) {
+					// usar log
+					e.printStackTrace();
+					stop = true;
+					answer = "6";
+				}
 				break;
 			case 6: stop = true; break;
 			default: stop = false;
@@ -82,37 +103,55 @@ public class WSConsumer {
 
 	}
 
-	private static void createUser() {
+	private static void createUser(String name, String email) {
 
-		// Pode ser reutilizado !
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
-		// Target também!
-		ResteasyWebTarget target = client.target("http://localhost:8080/thews-ws/rest/simpleusers/simpleuser");
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsclient/rest/users/createuser");
 
+		target = target.queryParam("name", name);
+		target = target.queryParam("email", email);
+
+//		System.out.println(target.getUri());
 
 		User theuser = new User();
-		theuser.setName("outro");
-
 
 		// request e response já terão de ser criados por request e response
-		Response response = target.request(MediaType.APPLICATION_XML).post(
-				Entity.entity(theuser, "application/xml"));
+		Response response = target.request().post(Entity.entity(theuser, "application/xml"));
 
 		if (response.getStatus() != 200) { // se nao correu tudo bem !
 			throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatus());
-		}
-
-		// 1# em objecto ! 
-		//SimpleUser usr_do_server =  response.readEntity(SimpleUser.class);
-		//System.out.println(usr_do_server.getUsername());
-		// ou um ou outro.. maneira 2# em string .. xml (de notar que a resposta tem o atributo id.. mas como o nosso objecto não o usa.. não o carrega)
-		System.out.println(response.readEntity(String.class));
+			// já existe email?
+//			org.postgresql.util.PSQLException
+		} else System.out.println(response.readEntity(User.class));
 
 
 	}
 
+	private static void deleteUser(String email) {
+
+		ResteasyClient client = new ResteasyClientBuilder().build();
+
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsclient/rest/users/deleteuser");
+
+		target = target.path(""+email);
+
+		System.out.println(target.getUri());
+
+		Response response = target.request().delete();
+
+		if (response.getStatus() != 200) { // se nao correu tudo bem !
+			throw new RuntimeException("Failed : HTTP error code : "
+					+ response.getStatus());
+			// não existe email?
+//			org.postgresql.util.PSQLException
+		} else System.out.println("Deleted user with email "+email); // qq coisa com response?
+
+
+	}
+
+	
 	private static void listAllUsers() {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
@@ -129,21 +168,17 @@ public class WSConsumer {
 
 		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsclient/rest/users");
 
-		// importante ! alterações na path nao tomam efeito, temos sempre de mudar a referencia
-		// target.path(""+id);  // no effect.. 
-		target = target.path(""+email);// correct !
+		target = target.path(""+email);
 
 		// só para ver se está :)
 //		System.out.println(target.getUri());
 
-		// default será o primeiro MediaType do service 
 		Response response = target.request().get();
 
-//		System.out.println(response.readEntity(String.class));
-//
 		System.out.println(response.readEntity(User.class));
 		
-		// if null n existe
+		// if null sysout n existe
+
 //		if (response.getStatus() != 200) { // se nao correu tudo bem !
 //			throw new RuntimeException("Failed : HTTP error code : "
 //					+ response.getStatus());
