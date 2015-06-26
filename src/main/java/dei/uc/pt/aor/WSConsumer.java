@@ -138,7 +138,7 @@ public class WSConsumer {
 	private static void listAllUsers() {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsclient/rest/users/allusers");
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/allusers");
 
 		Response response = target.request().get();
 
@@ -149,7 +149,7 @@ public class WSConsumer {
 	private static void getUserByEmail(String email) {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsclient/rest/users");
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users");
 
 		target = target.path(""+email);
 
@@ -174,7 +174,7 @@ public class WSConsumer {
 
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsclient/rest/users/createuser");
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/createuser");
 
 		target = target.queryParam("name", name);
 		target = target.queryParam("email", email);
@@ -200,7 +200,7 @@ public class WSConsumer {
 
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsclient/rest/users/deleteuser");
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/deleteuser");
 
 		target = target.path(""+email);
 
@@ -222,7 +222,7 @@ public class WSConsumer {
 
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsclient/rest/users/updateuser");
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/updateuser");
 
 		target = target.path(""+email);  // ver se existe!!
 		
@@ -243,6 +243,11 @@ public class WSConsumer {
 
 
 	}
+	
+	
+	//total users
+	//http://localhost:8080/playlist-wsserver/rest/users/totalusers
+	
 	
 
 }
