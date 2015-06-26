@@ -23,7 +23,8 @@ public class Users {
 		String s = "";
 		if ( (listUsers == null) || (listUsers.size() == 0) ) return "No users";
 		for (User u: listUsers) {
-			s += u.getName() + " -> " + u.getEmail() + "\n";
+			//format
+			s += u.getId() + ": " + u.getName() + ", " + u.getEmail() + "\n";
 		}
 		return  s;
 	}

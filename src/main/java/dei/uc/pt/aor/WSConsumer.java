@@ -14,7 +14,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 public class WSConsumer {
 
 	public static void main(String[] args) {
-
+		
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(System.in));
 
@@ -25,13 +25,14 @@ public class WSConsumer {
 
 			System.out.println("\n\n***** Choose *****");
 			System.out.println("1 - List users ");
-			System.out.println("2 - See user (by email)");
-			System.out.println("3 - Edit user name (by email)");
+			System.out.println("2 - See user (by id)");
+			System.out.println("3 - Edit user name (by id)");
 			System.out.println("4 - Create new user");
-			System.out.println("5 - Delete user (by email)");
-			System.out.println("6 - Quit");
-			System.out.println("7 - Edit user pass (by email)");
+			System.out.println("5 - Delete user (by id)");
+			System.out.println("7 - Edit user pass (by id)");
 			System.out.println("8 - Total users");
+			System.out.println("9 - See user (by email)");
+			System.out.println("0 - Quit");
 
 			try {
 				answer = reader.readLine();
@@ -39,9 +40,9 @@ public class WSConsumer {
 				// usar log
 				e.printStackTrace();
 				stop = true;
-				answer = "6";
+				answer = "0";
 			}
-			
+
 			System.out.println("\n");
 
 			int op = 1000;
@@ -58,32 +59,35 @@ public class WSConsumer {
 				break;
 			case 2: 
 				System.out.println("Checking user data... \n\n");
-				System.out.println("Insert the email: ");
-				String email = "";
+				System.out.println("Insert the user id: ");
+				Long id = 0L;
 				try {
-					email = reader.readLine();
-					getUserByEmail(email);
-				} catch (IOException e) {
+					String s = reader.readLine();
+					id = Long.parseLong(answer);
+					getUserById(id);
+				} catch (Exception e) {
 					// usar log
 					e.printStackTrace();
 					stop = true;
-					answer = "6";
+					answer = "0";
 				}
 				break;
 			case 3: 
+				System.out.println("Editing user name... \n\n");
+				System.out.println("Insert the user id: ");
+				id = 0L;
 				try {
-					System.out.println("Editing user name... \n\n");
-					System.out.println("Insert the email: ");
-					email = reader.readLine();
+					String s = reader.readLine();
 					//validacoes
+					id = Long.parseLong(answer);
 					System.out.println("Insert new user name: ");
 					String name = reader.readLine();
-					updateUser(email, name, "");
-				} catch (IOException e) {
+					updateUser(id, name, "");
+				} catch (Exception e) {
 					// usar log
 					e.printStackTrace();
 					stop = true;
-					answer = "6";
+					answer = "0";
 				}
 				break;
 			case 4: 
@@ -92,52 +96,69 @@ public class WSConsumer {
 					System.out.println("Insert the name: ");
 					String name = reader.readLine();
 					System.out.println("Insert the email: ");
-					email = reader.readLine();
+					String email = reader.readLine();
 					createUser(name, email);
 				} catch (IOException e) {
 					// usar log
 					e.printStackTrace();
 					stop = true;
-					answer = "6";
+					answer = "0";
 				}
 				break;
 			case 5: 
 				System.out.println("Deleting user... \n\n");
-				System.out.println("Insert the email: ");
-				email = "";
+				System.out.println("Insert the user id: ");
+				id = 0L;
 				try {
-					email = reader.readLine();
+					String s = reader.readLine();
+					id = Long.parseLong(answer);
 					//are you sure?
-					deleteUser(email);
+					deleteUser(id);
 				} catch (IOException e) {
 					// usar log
 					e.printStackTrace();
 					stop = true;
-					answer = "6";
+					answer = "0";
 				}
 				break;
-			case 6: stop = true; break;
 			case 7: 
+				System.out.println("Editing user password... \n\n");
+				System.out.println("Insert the user id: ");
+				id = 0L;
 				try {
-					System.out.println("Editing user password... \n\n");
-					System.out.println("Insert the email: ");
-					email = reader.readLine();
+					String s = reader.readLine();
+					id = Long.parseLong(answer);
 					//validacoes
 					System.out.println("Insert the new pass: ");
 					String pass = reader.readLine();
 					// confirm pass??
-					updateUser(email, "", pass);
+					updateUser(id, "", pass);
 				} catch (IOException e) {
 					// usar log
 					e.printStackTrace();
 					stop = true;
-					answer = "6";
+					answer = "0";
 				}
 				break;
 			case 8:
 				System.out.print("Total number of users: ");
 				totalUsers();
 				break;
+			case 9:
+				System.out.println("Checking user data... \n\n");
+				System.out.println("Insert the user email: ");
+				String email = "";
+				try {
+					email = reader.readLine();
+					getUserByEmail(email);
+				} catch (Exception e) {
+					// usar log
+					e.printStackTrace();
+					stop = true;
+					answer = "0";
+				}
+				break;
+			case 0: stop = true; break;
 			default: stop = false;
 			}
 
@@ -169,24 +190,35 @@ public class WSConsumer {
 
 	private static void getUserByEmail(String email) {
 		ResteasyClient client = new ResteasyClientBuilder().build();
-
 		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users");
-
 		target = target.path(""+email);
-
-		// só para ver se está :)
-//		System.out.println(target.getUri());
 
 		Response response = target.request().get();
 
 		System.out.println(response.readEntity(User.class));
-		
+
+	}
+
+	private static void getUserById(Long id) {
+		ResteasyClient client = new ResteasyClientBuilder().build();
+
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users");
+
+		target = target.path(""+id);
+
+		// só para ver se está :)
+		//		System.out.println(target.getUri());
+
+		Response response = target.request().get();
+
+		System.out.println(response.readEntity(User.class));
+
 		// if null sysout n existe
 
-//		if (response.getStatus() != 200) { // se nao correu tudo bem !
-//			throw new RuntimeException("Failed : HTTP error code : "
-//					+ response.getStatus());
-//		}
+		//		if (response.getStatus() != 200) { // se nao correu tudo bem !
+		//			throw new RuntimeException("Failed : HTTP error code : "
+		//					+ response.getStatus());
+		//		}
 
 	}
 
@@ -200,7 +232,7 @@ public class WSConsumer {
 		target = target.queryParam("name", name);
 		target = target.queryParam("email", email);
 
-//		System.out.println(target.getUri());
+		//		System.out.println(target.getUri());
 
 		User user = new User();
 
@@ -211,19 +243,19 @@ public class WSConsumer {
 			throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatus());
 			// já existe email?
-//			org.postgresql.util.PSQLException
+			//			org.postgresql.util.PSQLException
 		} else System.out.println(response.readEntity(User.class));
 
 
 	}
 
-	private static void deleteUser(String email) {
+	private static void deleteUser(Long id) {
 
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
 		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/deleteuser");
 
-		target = target.path(""+email);
+		target = target.path(""+id);
 
 		System.out.println(target.getUri());
 
@@ -233,24 +265,24 @@ public class WSConsumer {
 			throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatus());
 			// não existe email?
-//			org.postgresql.util.PSQLException
-		} else System.out.println("Deleted user with email "+email); // qq coisa com response?
+			//			org.postgresql.util.PSQLException
+		} else System.out.println("Deleted user with id "+id); // qq coisa com response?
 
 
 	}
-	
-	private static void updateUser(String email, String name, String pass) {
+
+	private static void updateUser(Long id, String name, String pass) {
 
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
 		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/updateuser");
 
-		target = target.path(""+email);  // ver se existe!!
-		
+		target = target.path(""+id);  // ver se existe!!
+
 		if (!name.equals("")) target = target.queryParam("name", name);
 		if (!pass.equals("")) target = target.queryParam("pass", pass);
 
-//		System.out.println(target.getUri());
+		//		System.out.println(target.getUri());
 
 		User user = new User();
 		Response response = target.request().put(Entity.entity(user, "application/xml"));
@@ -259,10 +291,10 @@ public class WSConsumer {
 			throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatus());
 			// não existe email?
-//			org.postgresql.util.PSQLException
-		} else System.out.println("Updated user with email "+email); // qq coisa com response?
+			//			org.postgresql.util.PSQLException
+		} else System.out.println("Updated user with id "+id); // qq coisa com response?
 
 
 	}
-	
+
 }
