@@ -26,10 +26,10 @@ public class WSConsumer {
 			System.out.println("\n\n***** Choose *****");
 			System.out.println("1 - List users ");
 			System.out.println("2 - See user (by id)");
-			System.out.println("3 - Edit user name (by id)");
+			System.out.println("3 - Change user name (by id)");
 			System.out.println("4 - Create new user");
 			System.out.println("5 - Delete user (by id)");
-			System.out.println("7 - Edit user pass (by id)");
+			System.out.println("7 - Change user pass (by id)");
 			System.out.println("8 - Total users");
 			System.out.println("9 - See user (by email)");
 			System.out.println("0 - Quit");
@@ -63,7 +63,7 @@ public class WSConsumer {
 				Long id = 0L;
 				try {
 					String s = reader.readLine();
-					id = Long.parseLong(answer);
+					id = Long.parseLong(s);
 					getUserById(id);
 				} catch (Exception e) {
 					// usar log
@@ -79,7 +79,7 @@ public class WSConsumer {
 				try {
 					String s = reader.readLine();
 					//validacoes
-					id = Long.parseLong(answer);
+					id = Long.parseLong(s);
 					System.out.println("Insert new user name: ");
 					String name = reader.readLine();
 					updateUser(id, name, "");
@@ -111,7 +111,7 @@ public class WSConsumer {
 				id = 0L;
 				try {
 					String s = reader.readLine();
-					id = Long.parseLong(answer);
+					id = Long.parseLong(s);
 					//are you sure?
 					deleteUser(id);
 				} catch (IOException e) {
@@ -127,7 +127,7 @@ public class WSConsumer {
 				id = 0L;
 				try {
 					String s = reader.readLine();
-					id = Long.parseLong(answer);
+					id = Long.parseLong(s);
 					//validacoes
 					System.out.println("Insert the new pass: ");
 					String pass = reader.readLine();
@@ -190,7 +190,7 @@ public class WSConsumer {
 
 	private static void getUserByEmail(String email) {
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users");
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/email");
 		target = target.path(""+email);
 
 		Response response = target.request().get();
@@ -202,7 +202,7 @@ public class WSConsumer {
 	private static void getUserById(Long id) {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users");
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/id");
 
 		target = target.path(""+id);
 
@@ -282,7 +282,7 @@ public class WSConsumer {
 		if (!name.equals("")) target = target.queryParam("name", name);
 		if (!pass.equals("")) target = target.queryParam("pass", pass);
 
-		//		System.out.println(target.getUri());
+				System.out.println(target.getUri());
 
 		User user = new User();
 		Response response = target.request().put(Entity.entity(user, "application/xml"));
