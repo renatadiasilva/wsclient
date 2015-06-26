@@ -31,6 +31,7 @@ public class WSConsumer {
 			System.out.println("5 - Delete user (by email)");
 			System.out.println("6 - Quit");
 			System.out.println("7 - Edit user pass (by email)");
+			System.out.println("8 - Total users");
 
 			try {
 				answer = reader.readLine();
@@ -56,6 +57,7 @@ public class WSConsumer {
 				listAllUsers();
 				break;
 			case 2: 
+				System.out.println("Checking user data... \n\n");
 				System.out.println("Insert the email: ");
 				String email = "";
 				try {
@@ -70,6 +72,7 @@ public class WSConsumer {
 				break;
 			case 3: 
 				try {
+					System.out.println("Editing user name... \n\n");
 					System.out.println("Insert the email: ");
 					email = reader.readLine();
 					//validacoes
@@ -85,6 +88,7 @@ public class WSConsumer {
 				break;
 			case 4: 
 				try {
+					System.out.println("Creating new user... \n\n");
 					System.out.println("Insert the name: ");
 					String name = reader.readLine();
 					System.out.println("Insert the email: ");
@@ -98,6 +102,7 @@ public class WSConsumer {
 				}
 				break;
 			case 5: 
+				System.out.println("Deleting user... \n\n");
 				System.out.println("Insert the email: ");
 				email = "";
 				try {
@@ -114,6 +119,7 @@ public class WSConsumer {
 			case 6: stop = true; break;
 			case 7: 
 				try {
+					System.out.println("Editing user password... \n\n");
 					System.out.println("Insert the email: ");
 					email = reader.readLine();
 					//validacoes
@@ -127,6 +133,10 @@ public class WSConsumer {
 					stop = true;
 					answer = "6";
 				}
+				break;
+			case 8:
+				System.out.print("Total number of users: ");
+				totalUsers();
 				break;
 			default: stop = false;
 			}
@@ -143,6 +153,17 @@ public class WSConsumer {
 		Response response = target.request().get();
 
 		System.out.println(response.readEntity(Users.class));
+
+	}
+
+	private static void totalUsers() {
+		ResteasyClient client = new ResteasyClientBuilder().build();
+
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/totalusers");
+
+		Response response = target.request().get();
+
+		System.out.println(response.readEntity(String.class));
 
 	}
 
@@ -244,10 +265,4 @@ public class WSConsumer {
 
 	}
 	
-	
-	//total users
-	//http://localhost:8080/playlist-wsserver/rest/users/totalusers
-	
-	
-
 }

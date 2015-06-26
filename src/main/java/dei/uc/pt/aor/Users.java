@@ -22,7 +22,9 @@ public class Users {
 	public String toString() {
 		String s = "";
 		if ( (listUsers == null) || (listUsers.size() == 0) ) return "No users";
-		for (User u: listUsers) s += u+"\n";
+		for (User u: listUsers) {
+			s += u.getName() + " -> " + u.getEmail() + "\n";
+		}
 		return  s;
 	}
 

@@ -43,7 +43,8 @@ public class User {
 	}
 	
 	public String toString() {
-		return name + " -> " + email;
+//		return name + " -> " + email;
+		return email + "\n" + name + "\n" + password + "\n"; 
 	}
 
 }
