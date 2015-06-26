@@ -11,7 +11,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
-public class WSConsumer {
+public class WSConsumerUser {
 
 	public static void main(String[] args) {
 		
