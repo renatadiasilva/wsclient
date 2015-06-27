@@ -68,7 +68,7 @@
 					<!-- will main class to MANIFEST.MF -->
 					<archive>
 						<manifest>
-							<mainClass>dei.uc.pt.aor.WSConsumer</mainClass>
+							<mainClass>dei.uc.pt.aor.RunWSClient</mainClass>
 						</manifest>
 					</archive>
 					<!-- will assembly the exploded dependencies within our uber jar -->

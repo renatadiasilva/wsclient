@@ -1,5 +1,7 @@
 package dei.uc.pt.aor;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="user")
@@ -9,7 +11,8 @@ public class User {
 	private String email;
 	private String password;
 	private String name;
-
+	private List<Playlist> playlists;
+	
 	public String getName() {
 		return name;
 	}
@@ -44,6 +47,14 @@ public class User {
 	
 	public String toString() {
 		return "\nId: " + id + "\nName: " + name + "\nEmail: " + email + "\n"; 
+	}
+
+	public List<Playlist> getPlaylists() {
+		return playlists;
+	}
+
+	public void setPlaylists(List<Playlist> playlists) {
+		this.playlists = playlists;
 	}
 
 }

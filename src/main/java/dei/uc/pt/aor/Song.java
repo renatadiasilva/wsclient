@@ -12,21 +12,6 @@ public class Song {
 	private String pathFile;
 	private User owner;
 	
-//	private List<Playlist> playlists;
-
-	public Song() {
-	}
-
-	public Song(String title, String artist, String album, int releaseYear,
-			String path, User owner) {
-		this.title = title;
-		this.artist = artist;
-		this.album = album;
-		this.releaseYear = releaseYear;
-		this.pathFile = path;
-		this.owner = owner;
-	}
-
 	public String getTitle() {
 		return title;
 	}
