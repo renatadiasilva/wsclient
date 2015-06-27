@@ -173,7 +173,7 @@ public class WSConsumerUser {
 
 		Response response = target.request().get();
 
-		System.out.println(response.readEntity(Users.class));
+		System.out.println(response.readEntity(UserCollection.class));
 
 	}
 
@@ -257,7 +257,7 @@ public class WSConsumerUser {
 
 		target = target.path(""+id);
 
-		System.out.println(target.getUri());
+//		System.out.println(target.getUri());
 
 		Response response = target.request().delete();
 
@@ -282,7 +282,7 @@ public class WSConsumerUser {
 		if (!name.equals("")) target = target.queryParam("name", name);
 		if (!pass.equals("")) target = target.queryParam("pass", pass);
 
-				System.out.println(target.getUri());
+//				System.out.println(target.getUri());
 
 		User user = new User();
 		Response response = target.request().put(Entity.entity(user, "application/xml"));

@@ -43,9 +43,7 @@ public class User {
 	}
 	
 	public String toString() {
-//		return name + " -> " + email;
-		//pass no??
-		return "\nName: " + name + "\nEmail: " + email + "\nEncrypted Pass: " + password + "\n"; 
+		return "\nId: " + id + "\nName: " + name + "\nEmail: " + email + "\n"; 
 	}
 
 }
