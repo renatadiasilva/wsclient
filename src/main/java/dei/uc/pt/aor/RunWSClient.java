@@ -78,7 +78,7 @@ public class RunWSClient {
 			System.out.println("6 - Create new user");
 			System.out.println("7 - Delete user (by id)");
 			System.out.println("8 - Change user pass (by id)");
-			System.out.println("0 - Quit");
+			System.out.println("0 - Go back");
 
 			try {
 				answer = reader.readLine();
@@ -126,10 +126,10 @@ public class RunWSClient {
 				case 5: //WSConsumerUser.listLoggedUsers(); break;
 					System.out.println("Not implemented yet"); break;
 				case 6: 
-					System.out.println("Insert the name: ");
+					System.out.print("Insert the name: ");
 					data1 = reader.readLine();
 					while (!done) {
-						System.out.println("Insert the email: ");
+						System.out.print("Insert the email: ");
 						data2 = reader.readLine();
 						if (data2.matches(".+@.+\\.[a-z]+")) {
 							done = true;
@@ -138,7 +138,7 @@ public class RunWSClient {
 					}
 					break;
 				case 7: 
-					System.out.println("Insert the user id: ");
+					System.out.print("Insert the user id: ");
 					while (!done) {
 						data1 = reader.readLine();
 						if (data1.matches("\\d+")) {
@@ -152,7 +152,7 @@ public class RunWSClient {
 					}
 					break;
 				case 8: 
-					System.out.println("Insert the user id: ");
+					System.out.print("Insert the user id: ");
 					while (!done) {
 						data1 = reader.readLine();
 						if (data1.matches("\\d+")) {

@@ -46,7 +46,7 @@ public class User {
 	}
 	
 	public String toString() {
-		return "\nId: " + id + "\nName: " + name + "\nEmail: " + email + "\n"; 
+		return "Id: " + id + "\nName: " + name + "\nEmail: " + email; 
 	}
 
 	public List<Playlist> getPlaylists() {
