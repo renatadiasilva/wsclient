@@ -1,7 +1,5 @@
 package dei.uc.pt.aor;
 
-//import java.util.List;
-
 public class Song {
 	
 	private Long id;
@@ -69,8 +67,10 @@ public class Song {
 	}
 	
 	public String toString() {
-		return title + " -> " + artist + ", " + album + ", " + releaseYear
-				+ ", " + pathFile + owner.getName();
+		return "Id: " + id + "\nTitle: " + title + "\nArtist: " + artist
+				+ "\nAlbum: " + album + "\nRelease Year: " + releaseYear
+				+ "\nPath File: " + pathFile + "\nAdded by: " + owner.getEmail(); 
+
 	}
 	
 }

@@ -97,9 +97,9 @@ public class RunWSClient {
 				op = 1000;
 			}
 
-			Long id = 0L;
 			String data1 = "";
 			String data2 = "";
+			String WSpath = "";
 			boolean done = false;
 
 			try {
@@ -112,13 +112,13 @@ public class RunWSClient {
 						data1 = reader.readLine();
 						if (data1.matches("\\d+")) {
 							done = true;
-							id = Long.parseLong(data1);
-							WSConsumerUser.getUserById(id);
+							WSpath = "id";
 						} else if (data1.matches(".+@.+\\.[a-z]+")) {
 							done = true;
-							WSConsumerUser.getUserByEmail(data1);
+							WSpath = "email";
 						}
 						else System.out.print("Please insert a valid id or email: ");
+						if (done) WSConsumerUser.UserInfo(data1, WSpath);
 					}
 					break;
 				case 4: //WSConsumerUser.totalLoggedUsers(); 
@@ -138,30 +138,44 @@ public class RunWSClient {
 					}
 					break;
 				case 7: 
-					System.out.print("Insert the user id: ");
+					System.out.print("Insert the user id or email: ");
 					while (!done) {
 						data1 = reader.readLine();
 						if (data1.matches("\\d+")) {
 							done = true;
-							id = Long.parseLong(data1);
+							WSpath = "id";
+						} else if (data1.matches(".+@.+\\.[a-z]+")) {
+							done = true;
+							WSpath = "email";
+						}
+						else System.out.print("Please insert a valid id or email: ");
+
+						if (done) {
 							System.out.println("Are you sure you want to delete user with id "+data1+" (y/n)?");
 							data2 = reader.readLine();
 							if ( (data2.charAt(0)=='Y') || (data2.charAt(0)=='y') )
-								WSConsumerUser.deleteUser(id);
-						} else System.out.println("Please insert a valid id: ");
+								WSConsumerUser.deleteUser(data1, WSpath);
+						}
 					}
 					break;
 				case 8: 
-					System.out.print("Insert the user id: ");
+					System.out.print("Insert the user id or email: ");
 					while (!done) {
 						data1 = reader.readLine();
 						if (data1.matches("\\d+")) {
 							done = true;
-							id = Long.parseLong(data1);
+							WSpath = "id";
+						} else if (data1.matches(".+@.+\\.[a-z]+")) {
+							done = true;
+							WSpath = "email";
+						}
+						else System.out.print("Please insert a valid id or email: ");
+						
+						if (done) {
 							System.out.println("Insert new password: ");
 							data2 = reader.readLine();
-							WSConsumerUser.changeUserPass(id, data2);
-						} else System.out.println("Please insert a valid id: ");
+							WSConsumerUser.changeUserPass(data1, data2, WSpath);
+						}
 					}
 					break;
 				case 0: stop = true; break;

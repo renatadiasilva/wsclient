@@ -11,7 +11,6 @@ public class User {
 	private String email;
 	private String password;
 	private String name;
-	private List<Playlist> playlists;
 	
 	public String getName() {
 		return name;
@@ -47,14 +46,6 @@ public class User {
 	
 	public String toString() {
 		return "Id: " + id + "\nName: " + name + "\nEmail: " + email; 
-	}
-
-	public List<Playlist> getPlaylists() {
-		return playlists;
-	}
-
-	public void setPlaylists(List<Playlist> playlists) {
-		this.playlists = playlists;
 	}
 
 }

@@ -46,45 +46,6 @@ public class WSConsumerUser {
 
 	}
 
-	// just one email/id
-	public static void getUserByEmail(String email) {
-		System.out.println("\nConnecting...\n");
-		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/email");
-		target = target.path(""+email);
-		Response response = target.request().get();
-
-		if (response.getStatus() == 204) {
-			System.out.println("There is no user with email "+ email);
-		} else if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
-					+ response.getStatus());
-		} else {
-			System.out.println("******** INFO OF USER ("+email+") ********\n");
-			System.out.println(response.readEntity(User.class));
-		}
-
-	}
-
-	public static void getUserById(Long id) {
-		System.out.println("\nConnecting...\n");
-		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/id");
-		target = target.path(""+id);
-		Response response = target.request().get();
-
-		if (response.getStatus() == 204) {
-			System.out.println("There is no user with id "+ id);
-		} else if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
-					+ response.getStatus());
-		} else {
-			System.out.println("******** INFO OF USER ("+id+") ********\n\n");
-			System.out.println(response.readEntity(User.class));
-		}
-
-	}
-
 	public static void createUser(String name, String email) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
@@ -108,12 +69,31 @@ public class WSConsumerUser {
 
 	}
 
-	// por email!!
-	public static void deleteUser(Long id) {
+	public static void UserInfo(String idemail, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/deleteuser");
-		target = target.path(""+id);
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/"+WSpath);
+		target = target.path(idemail);
+		Response response = target.request().get();
+
+		if (response.getStatus() == 204) {
+			System.out.println("There is no user with id/email "+ idemail);
+		} else if (response.getStatus() != 200) {
+			System.out.println("Failed : HTTP error code : "
+					+ response.getStatus());
+		} else {
+			System.out.println("******** INFO OF USER ("+idemail+") ********\n");
+			System.out.println(response.readEntity(User.class));
+		}
+
+	}
+
+//	/mudar as cenas no userservice
+	public static void deleteUser(String idemail, String WSpath) {
+		System.out.println("\nConnecting...\n");
+		ResteasyClient client = new ResteasyClientBuilder().build();
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/deleteuser/"+WSpath);
+		target = target.path(idemail);
 		Response response = target.request().delete();
 
 //		if (Response.notModified())
@@ -121,30 +101,30 @@ public class WSConsumerUser {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
 		} else {
-			System.out.println("******** DELETED USER WITH ID "+id+" ********\n\n");
+			System.out.println("******** DELETED USER WITH ID/EMAIL "+idemail+" ********\n\n");
 			//ver
 //			Response.notModified();
 		}
 
 	}
 
-	public static void changeUserPass(Long id, String pass) {
+	public static void changeUserPass(String idemail, String pass, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/changepass");
-		target = target.path(""+id);
+		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/changepass/"+WSpath);
+		target = target.path(idemail);
 		target = target.queryParam("pass", pass);
 
 		User user = new User();
 		Response response = target.request().put(Entity.entity(user, "application/xml"));
 
 		if (response.getStatus() == 500) {
-			System.out.println("There is no user with id "+ id);
+			System.out.println("There is no user with id/email "+ idemail);
 		} else if (response.getStatus() != 200) {
 			throw new RuntimeException("Failed : HTTP error code : "
 					+ response.getStatus());
 		} else {
-			System.out.println("******** UPDATED USER WITH "+id+" ********\n\n");
+			System.out.println("******** UPDATED USER WITH ID/EMAIL "+idemail+" ********\n\n");
 			System.out.println(response.readEntity(User.class));
 		}
 

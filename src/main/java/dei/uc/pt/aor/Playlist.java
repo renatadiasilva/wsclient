@@ -12,18 +12,6 @@ public class Playlist {
 	private int size;
 	private User owner;
 	
-	private List<Song> songs;
-	
-	public Playlist() {
-	}
-	
-	public Playlist(String name, Date dateOfCriation, User owner) {
-		this.name = name;
-		this.dateOfCriation = dateOfCriation;
-		this.owner = owner;
-		this.size = 0;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -63,18 +51,9 @@ public class Playlist {
 		this.size = size;
 	}
 
-	public List<Song> getSongs() {
-		return songs;
-	}
-
-	public void setSongs(ArrayList<Song> songs) {
-		this.songs = songs;
-	}
-	
 	public String toString() {
 		return "Id: " + id + "\nName: " + name + "\nDate of Creation: " + dateOfCriation 
-				+ "\nOwner: " + owner.getName() + "\nSize: " + size;
-		
+				+ "\nSize: " + size + "\nCreated by: " + owner.getEmail();
 	}
 
 }

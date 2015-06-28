@@ -8,25 +8,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name="collection")
 public class PlaylistCollection {
 	
-	@XmlElement(name="user")
-	private List<User> listUsers;
+	@XmlElement(name="playlist")
+	private List<Playlist> listPlaylists;
 	
-	public List<User> getList() {
-		return listUsers;
+	public List<Playlist> getList() {
+		return listPlaylists;
 	}
 
-	public void setList(List<User> list) {
-		this.listUsers = list;
+	public void setList(List<Playlist> list) {
+		this.listPlaylists = list;
 	}
 	
 	public String toString() {
 		String s = "";
-		if ( (listUsers == null) || (listUsers.size() == 0) ) return "No users";
+		if ( (listPlaylists == null) || (listPlaylists.size() == 0) ) return "No playlists";
 		String su = String.format("%4s %13s %28s\n", "ID", "NAME", "DATE OF CREATION", "SIZE", "OWNER");
 		s += su;
 		s += "-------------------------------------------------------------\n";
-		for (User u: listUsers) {
-			su = String.format("%4d  %-25s %-30s \n", u.getId(), u.getName(), u.getEmail());
+		for (Playlist p: listPlaylists) {
+			su = String.format("%4d  %-25s %-30s \n", p.getId(), p.getName(),
+					p.getDateOfCriation(), p.getSize(), p.getOwner());
 			s += su;
 		}
 		return  s;
