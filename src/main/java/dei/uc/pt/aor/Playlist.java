@@ -71,21 +71,9 @@ public class Playlist {
 		this.songs = songs;
 	}
 	
-//	public void addSong(Song s) {
-//
-//		if (this.songs == null) this.songs = new ArrayList<Song>();
-//		this.songs.add(s);
-//		size++;
-//	}
-//	
-//	public void removeSong(Song s) {
-//		songs.remove(s);
-//		size--;
-//	}
-	
 	public String toString() {
-		return name + " -> " + dateOfCriation + ", " + owner.getName() +
-				", " + size ;
+		return "Id: " + id + "\nName: " + name + "\nDate of Creation: " + dateOfCriation 
+				+ "\nOwner: " + owner.getName() + "\nSize: " + size;
 		
 	}
 

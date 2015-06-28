@@ -22,7 +22,7 @@ public class PlaylistCollection {
 	public String toString() {
 		String s = "";
 		if ( (listUsers == null) || (listUsers.size() == 0) ) return "No users";
-		String su = String.format("%4s %13s %28s\n", "ID", "NAME", "EMAIL");
+		String su = String.format("%4s %13s %28s\n", "ID", "NAME", "DATE OF CREATION", "SIZE", "OWNER");
 		s += su;
 		s += "-------------------------------------------------------------\n";
 		for (User u: listUsers) {
