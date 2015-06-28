@@ -13,11 +13,13 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 public class WSConsumerUser {
+	
+	final static private String WSurl = "http://localhost:8080/playlist-wsserver/rest/users";	
 
 	public static void totalUsers() {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/totalusers");
+		ResteasyWebTarget target = client.target(WSurl+"/totalusers");
 		Response response = target.request().get();
 
 		if (response.getStatus() != 200) {
@@ -33,7 +35,7 @@ public class WSConsumerUser {
 	public static void listAllUsers() {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/allusers");
+		ResteasyWebTarget target = client.target(WSurl+"/allusers");
 		Response response = target.request().get();
 
 		if (response.getStatus() != 200) {
@@ -49,7 +51,7 @@ public class WSConsumerUser {
 	public static void createUser(String name, String email) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/createuser");
+		ResteasyWebTarget target = client.target(WSurl+"/createuser");
 		target = target.queryParam("name", name);
 		target = target.queryParam("email", email);
 
@@ -69,10 +71,10 @@ public class WSConsumerUser {
 
 	}
 
-	public static void UserInfo(String idemail, String WSpath) {
+	public static void userInfo(String idemail, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/"+WSpath);
+		ResteasyWebTarget target = client.target(WSurl+WSpath);
 		target = target.path(idemail);
 		Response response = target.request().get();
 
@@ -88,11 +90,10 @@ public class WSConsumerUser {
 
 	}
 
-//	/mudar as cenas no userservice
 	public static void deleteUser(String idemail, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/deleteuser/"+WSpath);
+		ResteasyWebTarget target = client.target(WSurl+"/deleteuser"+WSpath);
 		target = target.path(idemail);
 		Response response = target.request().delete();
 
@@ -111,7 +112,7 @@ public class WSConsumerUser {
 	public static void changeUserPass(String idemail, String pass, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target("http://localhost:8080/playlist-wsserver/rest/users/changepass/"+WSpath);
+		ResteasyWebTarget target = client.target(WSurl+"/changepass"+WSpath);
 		target = target.path(idemail);
 		target = target.queryParam("pass", pass);
 

@@ -65,19 +65,19 @@ public class RunWSClient {
 				new InputStreamReader(System.in));
 
 		boolean stop = false;
-		String answer = "1";  // ver
+		String answer = "1";
 
 		while (!stop) {
 
 			System.out.println("\n\n***** Choose *****");
-			System.out.println("1 - Check number of users");
+			System.out.println("1 - Total number of users");
 			System.out.println("2 - List all users");
-			System.out.println("3 - Check user info (by id or email)");
-			System.out.println("4 - Check number of logged users");
+			System.out.println("3 - Consult user info");
+			System.out.println("4 - Total number of logged users");
 			System.out.println("5 - List all logged users");
 			System.out.println("6 - Create new user");
-			System.out.println("7 - Delete user (by id)");
-			System.out.println("8 - Change user pass (by id)");
+			System.out.println("7 - Delete user");
+			System.out.println("8 - Change user pass");
 			System.out.println("0 - Go back");
 
 			try {
@@ -112,14 +112,14 @@ public class RunWSClient {
 						data1 = reader.readLine();
 						if (data1.matches("\\d+")) {
 							done = true;
-							WSpath = "id";
+							WSpath = "/id";
 						} else if (data1.matches(".+@.+\\.[a-z]+")) {
 							done = true;
-							WSpath = "email";
+							WSpath = "/email";
 						}
 						else System.out.print("Please insert a valid id or email: ");
-						if (done) WSConsumerUser.UserInfo(data1, WSpath);
 					}
+					WSConsumerUser.userInfo(data1, WSpath);
 					break;
 				case 4: //WSConsumerUser.totalLoggedUsers(); 
 					System.out.println("Not implemented yet"); break;
@@ -143,20 +143,17 @@ public class RunWSClient {
 						data1 = reader.readLine();
 						if (data1.matches("\\d+")) {
 							done = true;
-							WSpath = "id";
+							WSpath = "/id";
 						} else if (data1.matches(".+@.+\\.[a-z]+")) {
 							done = true;
-							WSpath = "email";
+							WSpath = "/email";
 						}
 						else System.out.print("Please insert a valid id or email: ");
-
-						if (done) {
-							System.out.println("Are you sure you want to delete user with id "+data1+" (y/n)?");
-							data2 = reader.readLine();
-							if ( (data2.charAt(0)=='Y') || (data2.charAt(0)=='y') )
-								WSConsumerUser.deleteUser(data1, WSpath);
-						}
 					}
+					System.out.println("Are you sure you want to delete user with id "+data1+" (y/n)?");
+					data2 = reader.readLine();
+					if ( (data2.charAt(0)=='Y') || (data2.charAt(0)=='y') )
+						WSConsumerUser.deleteUser(data1, WSpath);
 					break;
 				case 8: 
 					System.out.print("Insert the user id or email: ");
@@ -164,19 +161,16 @@ public class RunWSClient {
 						data1 = reader.readLine();
 						if (data1.matches("\\d+")) {
 							done = true;
-							WSpath = "id";
+							WSpath = "/id";
 						} else if (data1.matches(".+@.+\\.[a-z]+")) {
 							done = true;
-							WSpath = "email";
+							WSpath = "/email";
 						}
 						else System.out.print("Please insert a valid id or email: ");
-						
-						if (done) {
-							System.out.println("Insert new password: ");
-							data2 = reader.readLine();
-							WSConsumerUser.changeUserPass(data1, data2, WSpath);
-						}
 					}
+					System.out.println("Insert new password: ");
+					data2 = reader.readLine();
+					WSConsumerUser.changeUserPass(data1, data2, WSpath);
 					break;
 				case 0: stop = true; break;
 				default: stop = false;
@@ -197,150 +191,163 @@ public class RunWSClient {
 				new InputStreamReader(System.in));
 
 		boolean stop = false;
-		String answer = "1";  // ver
+		String answer = "1";
 
 		while (!stop) {
 
 			System.out.println("\n\n***** Choose *****");
-			System.out.println("1 - List users ");
-			System.out.println("2 - See user (by id)");
-			System.out.println("3 - Change user name (by id)");
-			System.out.println("4 - Create new user");
-			System.out.println("5 - Delete user (by id)");
-			System.out.println("7 - Change user pass (by id)");
-			System.out.println("8 - Total users");
-			System.out.println("9 - See user (by email)");
-			System.out.println("0 - Quit");
+			System.out.println("1 - Total number of playlists");
+			System.out.println("2 - List all playlists");
+			System.out.println("3 - List playlists of user");
+			System.out.println("4 - Add/Remove songs to playlist");
+			System.out.println("0 - Go back");
 
-			menuMain();
+			try {
+				answer = reader.readLine();
+			} catch (IOException e) {
+				// usar log
+				e.printStackTrace();
+				answer = "100";
+			}
 
-			//			try {
-			//				answer = reader.readLine();
-			//			} catch (IOException e) {
-			//				// usar log
-			//				e.printStackTrace();
-			//				stop = true;
-			//				answer = "0";
-			//			}
-			//
-			//			System.out.println("\n");
-			//
-			//			int op = 1000;
-			//			try {
-			//				op = Integer.parseInt(answer);
-			//			} catch (Exception e) {
-			//				op = 1000;
-			//			}
-			//			// try catch
-			//			switch (op) {
-			//			case 1: 
-			//				System.out.println("Listing all users...\n\n");
-			//				listAllUsers();
-			//				break;
-			//			case 2: 
-			//				System.out.println("Checking user data... \n\n");
-			//				System.out.println("Insert the user id: ");
-			//				Long id = 0L;
-			//				try {
-			//					String s = reader.readLine();
-			//					id = Long.parseLong(s);
-			//					getUserById(id);
-			//				} catch (Exception e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 3: 
-			//				System.out.println("Editing user name... \n\n");
-			//				System.out.println("Insert the user id: ");
-			//				id = 0L;
-			//				try {
-			//					String s = reader.readLine();
-			//					//validacoes
-			//					id = Long.parseLong(s);
-			//					System.out.println("Insert new user name: ");
-			//					String name = reader.readLine();
-			//					updateUser(id, name, "");
-			//				} catch (Exception e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 4: 
-			//				try {
-			//					System.out.println("Creating new user... \n\n");
-			//					System.out.println("Insert the name: ");
-			//					String name = reader.readLine();
-			//					System.out.println("Insert the email: ");
-			//					String email = reader.readLine();
-			//					createUser(name, email);
-			//				} catch (IOException e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 5: 
-			//				System.out.println("Deleting user... \n\n");
-			//				System.out.println("Insert the user id: ");
-			//				id = 0L;
-			//				try {
-			//					String s = reader.readLine();
-			//					id = Long.parseLong(s);
-			//					//are you sure?
-			//					deleteUser(id);
-			//				} catch (IOException e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 7: 
-			//				System.out.println("Editing user password... \n\n");
-			//				System.out.println("Insert the user id: ");
-			//				id = 0L;
-			//				try {
-			//					String s = reader.readLine();
-			//					id = Long.parseLong(s);
-			//					//validacoes
-			//					System.out.println("Insert the new pass: ");
-			//					String pass = reader.readLine();
-			//					// confirm pass??
-			//					updateUser(id, "", pass);
-			//				} catch (IOException e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 8:
-			//				System.out.print("Total number of users: ");
-			//				totalUsers();
-			//				break;
-			//			case 9:
-			//				System.out.println("Checking user data... \n\n");
-			//				System.out.println("Insert the user email: ");
-			//				String email = "";
-			//				try {
-			//					email = reader.readLine();
-			//					getUserByEmail(email);
-			//				} catch (Exception e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 0: stop = true; break;
-			//			default: stop = false;
-			//			}
+			System.out.println("\n");
+
+			int op = 1000;
+			try {
+				op = Integer.parseInt(answer);
+			} catch (Exception e) {
+				op = 1000;
+			}
+
+			Long pid = 0L;
+			String data = "";
+			String WSpath = "";
+			boolean done = false;
+
+			try {
+				switch (op) {
+				case 1: WSConsumerPlaylist.totalPlaylists(); break;
+				case 2: WSConsumerPlaylist.listAllPlaylists(); break;
+				case 3: 
+					System.out.print("Insert the user id or email: ");
+					while (!done) {
+						data = reader.readLine();
+						if (data.matches("\\d+")) {
+							done = true;
+							WSpath = "/id";
+						} else if (data.matches(".+@.+\\.[a-z]+")) {
+							done = true;
+							WSpath = "/email";
+						}
+						else System.out.print("Please insert a valid id or email: ");
+					}
+					WSConsumerPlaylist.playlistsOfUser(data, WSpath);
+					break;
+				case 4: 
+					//list all playlists, choose one
+					WSConsumerPlaylist.listAllPlaylists();
+					System.out.print("Insert the playlist id to add/remove songs: ");
+					while (!done) {
+						data = reader.readLine();
+						if (data.matches("\\d+")) {
+							done = true;
+							pid = Long.parseLong(data);
+						}
+						else System.out.print("Please insert a valid id: ");
+					}
+					menuPlaylist(pid);
+					break;
+				case 0: stop = true; break;
+				default: stop = false;
+				}
+			} catch (Exception e) {
+				// usar log
+				e.printStackTrace();
+				stop = true;
+			}
+
+		}
+
+	}
+	
+	public static void menuPlaylist(Long pid) {
+
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(System.in));
+
+		boolean stop = false;
+		String answer = "1";
+
+		while (!stop) {
+
+			System.out.println("\n\n***** Choose *****");
+			System.out.println("1 - List songs of playlist "+ pid);
+			System.out.println("2 - Add song to playlist "+ pid);
+			System.out.println("3 - Remove song from playlist "+ pid);
+			System.out.println("0 - Go back");
+
+			try {
+				answer = reader.readLine();
+			} catch (IOException e) {
+				// usar log
+				e.printStackTrace();
+				answer = "100";
+			}
+
+			System.out.println("\n");
+
+			int op = 1000;
+			try {
+				op = Integer.parseInt(answer);
+			} catch (Exception e) {
+				op = 1000;
+			}
+
+			Long sid = 0L;
+			String data = "";
+			boolean done = false;
+
+			try {
+				switch (op) {
+				case 1: WSConsumerSong.songsOfPlaylist(pid); break;
+				case 2:
+					//list all songs, choose one to add
+					WSConsumerSong.listAllSongs();
+					System.out.print("Insert the song id to add: ");
+					while (!done) {
+						data = reader.readLine();
+						if (data.matches("\\d+")) {
+							done = true;
+							sid = Long.parseLong(data);
+						}
+						else System.out.print("Please insert a valid id: ");
+					}
+					WSConsumerPlaylist.updateSongPlaylist(sid, pid, "/addsongtoplaylist");				
+					WSConsumerSong.songsOfPlaylist(pid);
+					break;
+				case 3: 
+					//list all songs of playlist, choose one to remove
+					WSConsumerSong.songsOfPlaylist(pid);
+					System.out.print("Insert the song id to remove: ");
+					while (!done) {
+						data = reader.readLine();
+						if (data.matches("\\d+")) {
+							done = true;
+							sid = Long.parseLong(data);
+						}
+						else System.out.print("Please insert a valid id: ");
+					}
+					WSConsumerPlaylist.updateSongPlaylist(sid, pid, "/removesongfromplaylist");				
+					WSConsumerSong.songsOfPlaylist(pid);
+					break;
+				case 0: stop = true; break;
+				default: stop = false;
+				}
+			} catch (Exception e) {
+				// usar log
+				e.printStackTrace();
+				stop = true;
+			}
 
 		}
 
@@ -352,151 +359,151 @@ public class RunWSClient {
 				new InputStreamReader(System.in));
 
 		boolean stop = false;
-		String answer = "1";  // ver
+		String answer = "1";
 
 		while (!stop) {
 
 			System.out.println("\n\n***** Choose *****");
-			System.out.println("1 - List users ");
-			System.out.println("2 - See user (by id)");
-			System.out.println("3 - Change user name (by id)");
-			System.out.println("4 - Create new user");
-			System.out.println("5 - Delete user (by id)");
-			System.out.println("7 - Change user pass (by id)");
-			System.out.println("8 - Total users");
-			System.out.println("9 - See user (by email)");
-			System.out.println("0 - Quit");
+			System.out.println("1 - Total number of songs");
+			System.out.println("2 - List all songs");
+			System.out.println("3 - Consult song info");
+			System.out.println("4 - Delete songs of user");
+			System.out.println("0 - Go back");
 
-			menuMain();
+			try {
+				answer = reader.readLine();
+			} catch (IOException e) {
+				// usar log
+				e.printStackTrace();
+				answer = "100";
+			}
 
-			//			try {
-			//				answer = reader.readLine();
-			//			} catch (IOException e) {
-			//				// usar log
-			//				e.printStackTrace();
-			//				stop = true;
-			//				answer = "0";
-			//			}
-			//
-			//			System.out.println("\n");
-			//
-			//			int op = 1000;
-			//			try {
-			//				op = Integer.parseInt(answer);
-			//			} catch (Exception e) {
-			//				op = 1000;
-			//			}
-			//			// try catch
-			//			switch (op) {
-			//			case 1: 
-			//				System.out.println("Listing all users...\n\n");
-			//				listAllUsers();
-			//				break;
-			//			case 2: 
-			//				System.out.println("Checking user data... \n\n");
-			//				System.out.println("Insert the user id: ");
-			//				Long id = 0L;
-			//				try {
-			//					String s = reader.readLine();
-			//					id = Long.parseLong(s);
-			//					getUserById(id);
-			//				} catch (Exception e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 3: 
-			//				System.out.println("Editing user name... \n\n");
-			//				System.out.println("Insert the user id: ");
-			//				id = 0L;
-			//				try {
-			//					String s = reader.readLine();
-			//					//validacoes
-			//					id = Long.parseLong(s);
-			//					System.out.println("Insert new user name: ");
-			//					String name = reader.readLine();
-			//					updateUser(id, name, "");
-			//				} catch (Exception e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 4: 
-			//				try {
-			//					System.out.println("Creating new user... \n\n");
-			//					System.out.println("Insert the name: ");
-			//					String name = reader.readLine();
-			//					System.out.println("Insert the email: ");
-			//					String email = reader.readLine();
-			//					createUser(name, email);
-			//				} catch (IOException e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 5: 
-			//				System.out.println("Deleting user... \n\n");
-			//				System.out.println("Insert the user id: ");
-			//				id = 0L;
-			//				try {
-			//					String s = reader.readLine();
-			//					id = Long.parseLong(s);
-			//					//are you sure?
-			//					deleteUser(id);
-			//				} catch (IOException e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 7: 
-			//				System.out.println("Editing user password... \n\n");
-			//				System.out.println("Insert the user id: ");
-			//				id = 0L;
-			//				try {
-			//					String s = reader.readLine();
-			//					id = Long.parseLong(s);
-			//					//validacoes
-			//					System.out.println("Insert the new pass: ");
-			//					String pass = reader.readLine();
-			//					// confirm pass??
-			//					updateUser(id, "", pass);
-			//				} catch (IOException e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 8:
-			//				System.out.print("Total number of users: ");
-			//				totalUsers();
-			//				break;
-			//			case 9:
-			//				System.out.println("Checking user data... \n\n");
-			//				System.out.println("Insert the user email: ");
-			//				String email = "";
-			//				try {
-			//					email = reader.readLine();
-			//					getUserByEmail(email);
-			//				} catch (Exception e) {
-			//					// usar log
-			//					e.printStackTrace();
-			//					stop = true;
-			//					answer = "0";
-			//				}
-			//				break;
-			//			case 0: stop = true; break;
-			//			default: stop = false;
-			//			}
-			//
+			System.out.println("\n");
+
+			int op = 1000;
+			try {
+				op = Integer.parseInt(answer);
+			} catch (Exception e) {
+				op = 1000;
+			}
+
+			Long id = 0L;
+			String data = "";
+			String WSpath = ""; //?
+			boolean done = false;
+
+			try {
+				switch (op) {
+				case 1: WSConsumerSong.totalSongs(); break;
+				case 2: WSConsumerSong.listAllSongs(); break;
+				case 3:
+					System.out.print("Insert the song id: ");
+					while (!done) {
+						data = reader.readLine();
+						if (data.matches("\\d+")) {
+							done = true;
+							id = Long.parseLong(data);
+						}
+						else System.out.print("Please insert a valid id: ");
+					}
+					WSConsumerSong.songInfo(id);
+					break;
+				case 4: 
+					//list all users and choose one
+					WSConsumerUser.listAllUsers();
+					System.out.print("Insert the user id to remove songs: ");
+					System.out.print("Insert the user id or email: ");
+					while (!done) {
+						data = reader.readLine();
+						if (data.matches("\\d+")) {
+							done = true;
+							WSpath = "/id";
+						} else if (data.matches(".+@.+\\.[a-z]+")) {
+							done = true;
+							WSpath = "/email";
+						}
+						else System.out.print("Please insert a valid id or email: ");
+					}
+					menuUser(data, WSpath);
+					break;
+				case 0: stop = true; break;
+				default: stop = false;
+				}
+			} catch (Exception e) {
+				// usar log
+				e.printStackTrace();
+				stop = true;
+			}
+
+		}
+
+	}
+
+	public static void menuUser(String idemail, String WSpath) {
+
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(System.in));
+
+		boolean stop = false;
+		String answer = "1";
+
+		while (!stop) {
+
+			System.out.println("\n\n***** Choose *****");
+			System.out.println("1 - List songs of user "+ idemail);
+			System.out.println("2 - Delete song of user "+ idemail);
+			System.out.println("0 - Go back");
+
+			try {
+				answer = reader.readLine();
+			} catch (IOException e) {
+				// usar log
+				e.printStackTrace();
+				answer = "100";
+			}
+
+			System.out.println("\n");
+
+			int op = 1000;
+			try {
+				op = Integer.parseInt(answer);
+			} catch (Exception e) {
+				op = 1000;
+			}
+
+			Long sid = 0L;
+			String data = "";
+			boolean done = false;
+
+			try {
+				switch (op) {
+				case 1: WSConsumerSong.songsOfUser(idemail, WSpath); break;
+				case 2:
+					//list all songs of user, choose one to remove
+					WSConsumerSong.songsOfUser(idemail, WSpath);
+					//choose song to delete
+					System.out.print("Insert the song id to delete: ");
+					while (!done) {
+						data = reader.readLine();
+						if (data.matches("\\d+")) {
+							done = true;
+							sid = Long.parseLong(data);
+						}
+						else System.out.print("Please insert a valid id: ");
+					}
+					//deletesongfor good?
+					WSConsumerSong.deleteSong(sid);
+					WSConsumerSong.songsOfUser(idemail, WSpath);
+					break;
+				case 0: stop = true; break;
+				default: stop = false;
+				}
+			} catch (Exception e) {
+				// usar log
+				e.printStackTrace();
+				stop = true;
+			}
+
 		}
 
 	}
