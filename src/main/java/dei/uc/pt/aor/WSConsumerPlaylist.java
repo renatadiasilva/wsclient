@@ -16,7 +16,8 @@ public class WSConsumerPlaylist {
 	
 	final static private String WSurl = "http://localhost:8080/playlist-wsserver/rest/playlists";
 
-	public static void totalPlaylists() {
+	public static int totalPlaylists() {
+
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/totalplaylists");
@@ -25,14 +26,12 @@ public class WSConsumerPlaylist {
 		if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
-		} else {
-			System.out.print("Total number of playlists: ");
-			System.out.println(response.readEntity(String.class));
-		}
+			return -1;
+		} else return Integer.parseInt(response.readEntity(String.class));
 
 	}
 
-	public static void listAllPlaylists() {
+	public static boolean listAllPlaylists() {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/allplaylists");
@@ -41,14 +40,16 @@ public class WSConsumerPlaylist {
 		if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** LIST OF ALL PLAYLISTS ********\n\n");
 			System.out.println(response.readEntity(PlaylistCollection.class));
+			return true;
 		}
 
 	}
 
-	public static void playlistsOfUser(String idemail, String WSpath) {
+	public static boolean playlistsOfUser(String idemail, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/playlistsofuser"+WSpath);
@@ -57,17 +58,20 @@ public class WSConsumerPlaylist {
 
 		if (response.getStatus() == 204) { //500?
 			System.out.println("There is no user with id/email "+ idemail);
+			return false;
 		} else if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** PLAYLISTS OF USER ("+idemail+") ********\n\n");
 			System.out.println(response.readEntity(PlaylistCollection.class));
+			return true;
 		}
 
 	}
 
-	public static void updateSongPlaylist (Long sid, Long pid, String WSpath) {
+	public static boolean updateSongPlaylist (Long sid, Long pid, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+WSpath);
@@ -79,13 +83,16 @@ public class WSConsumerPlaylist {
 
 		if (response.getStatus() == 500) {
 			System.out.println("There is no song/playlist with id "+ sid + "/" + pid);
+			return false;
 		} else if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : "
+			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** UPDATED PLAYLIST ("+pid+") ********\n\n");
 //			System.out.println(response.readEntity(Playlist.class));
 			//response modify??
+			return true;
 		}
 
 	}

@@ -16,7 +16,8 @@ public class WSConsumerUser {
 	
 	final static private String WSurl = "http://localhost:8080/playlist-wsserver/rest/users";	
 
-	public static void totalUsers() {
+	public static int totalUsers() {
+
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/totalusers");
@@ -25,14 +26,12 @@ public class WSConsumerUser {
 		if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
-		} else {
-			System.out.print("Total number of users: ");
-			System.out.println(response.readEntity(String.class));
-		}
+			return -1;
+		} else return Integer.parseInt(response.readEntity(String.class));
 
 	}
 
-	public static void listAllUsers() {
+	public static boolean listAllUsers() {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/allusers");
@@ -41,14 +40,16 @@ public class WSConsumerUser {
 		if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** LIST OF ALL USERS ********\n\n");
 			System.out.println(response.readEntity(UserCollection.class));
+			return true;
 		}
 
 	}
 
-	public static void createUser(String name, String email) {
+	public static boolean createUser(String name, String email) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/createuser");
@@ -60,18 +61,21 @@ public class WSConsumerUser {
 
 		if (response.getStatus() == 500) {
 			System.out.println("An user with email "+ email +" already exists!");
+			return false;
 		} else if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** NEW USER CREATED ********\n\n");
 			System.out.println(response.readEntity(User.class));
 			System.out.println("Default pass: 123");
+			return true;
 		}
 
 	}
 
-	public static void userInfo(String idemail, String WSpath) {
+	public static boolean userInfo(String idemail, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+WSpath);
@@ -80,17 +84,20 @@ public class WSConsumerUser {
 
 		if (response.getStatus() == 204) {
 			System.out.println("There is no user with id/email "+ idemail);
+			return false;
 		} else if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** INFO OF USER ("+idemail+") ********\n");
 			System.out.println(response.readEntity(User.class));
+			return true;
 		}
 
 	}
 
-	public static void deleteUser(String idemail, String WSpath) {
+	public static boolean deleteUser(String idemail, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/deleteuser"+WSpath);
@@ -101,15 +108,17 @@ public class WSConsumerUser {
 		if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** DELETED USER WITH ID/EMAIL "+idemail+" ********\n\n");
 			//ver
 //			Response.notModified();
+			return true;
 		}
 
 	}
 
-	public static void changeUserPass(String idemail, String pass, String WSpath) {
+	public static boolean changeUserPass(String idemail, String pass, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/changepass"+WSpath);
@@ -121,12 +130,15 @@ public class WSConsumerUser {
 
 		if (response.getStatus() == 500) {
 			System.out.println("There is no user with id/email "+ idemail);
+			return false;
 		} else if (response.getStatus() != 200) {
-			throw new RuntimeException("Failed : HTTP error code : "
+			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** UPDATED USER WITH ID/EMAIL "+idemail+" ********\n\n");
 			System.out.println(response.readEntity(User.class));
+			return true;
 		}
 
 	}

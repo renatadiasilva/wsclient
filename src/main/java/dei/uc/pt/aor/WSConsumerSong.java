@@ -16,7 +16,7 @@ public class WSConsumerSong {
 
 	final static private String WSurl = "http://localhost:8080/playlist-wsserver/rest/songs";	
 
-	public static void totalSongs() {
+	public static int totalSongs() {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/totalsongs");
@@ -25,14 +25,12 @@ public class WSConsumerSong {
 		if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
-		} else {
-			System.out.print("Total number of songs: ");
-			System.out.println(response.readEntity(String.class));
-		}
+			return -1;
+		} else return Integer.parseInt(response.readEntity(String.class));
 
 	}
 
-	public static void listAllSongs() {
+	public static boolean listAllSongs() {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/allsongs");
@@ -41,14 +39,16 @@ public class WSConsumerSong {
 		if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** LIST OF ALL SONGS ********\n\n");
 			System.out.println(response.readEntity(PlaylistCollection.class));
+			return true;
 		}
 
 	}
 
-	public static void songInfo(Long id) {
+	public static boolean songInfo(Long id) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl);
@@ -57,17 +57,20 @@ public class WSConsumerSong {
 
 		if (response.getStatus() == 204) {
 			System.out.println("There is no song with id "+ id);
+			return false;
 		} else if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** INFO OF SONG ("+id+") ********\n");
 			System.out.println(response.readEntity(Song.class));
+			return true;
 		}
 
 	}
 	
-	public static void deleteSong(Long id) {
+	public static boolean deleteSong(Long id) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/deletesong");
@@ -78,15 +81,32 @@ public class WSConsumerSong {
 		if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** DELETED SONG WITH ID "+id+" ********\n\n");
 			//ver
 //			Response.notModified();
+			return true;
 		}
 
 	}
 
-	public static void songsOfUser(String idemail, String WSpath) {
+	public static int totalSongsOfUser(String idemail, String WSpath) {
+		System.out.println("\nConnecting...\n");
+		ResteasyClient client = new ResteasyClientBuilder().build();
+		ResteasyWebTarget target = client.target(WSurl+"/totalsongsofuser"+WSpath);
+		target = target.path(idemail);
+		Response response = target.request().get();
+
+		if (response.getStatus() != 200) {
+			System.out.println("Failed : HTTP error code : "
+					+ response.getStatus());
+			return -1;
+		} else return Integer.parseInt(response.readEntity(String.class));
+
+	}
+	
+	public static boolean songsOfUser(String idemail, String WSpath) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/songsofuser/"+WSpath);
@@ -95,17 +115,35 @@ public class WSConsumerSong {
 
 		if (response.getStatus() == 204) { //500?
 			System.out.println("There is no user with id/email "+ idemail);
+			return false;
 		} else if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** SONGS OF USER ("+idemail+") ********\n\n");
 			System.out.println(response.readEntity(SongCollection.class));
+			return true;
 		}
 
 	}
 
-	public static void songsOfPlaylist(Long pid) {
+	public static int totalSongsOfPlaylist(Long pid) {
+		System.out.println("\nConnecting...\n");
+		ResteasyClient client = new ResteasyClientBuilder().build();
+		ResteasyWebTarget target = client.target(WSurl+"/totalsongsofplaylist");
+		target = target.path(""+pid);
+		Response response = target.request().get();
+
+		if (response.getStatus() != 200) {
+			System.out.println("Failed : HTTP error code : "
+					+ response.getStatus());
+			return -1;
+		} else return Integer.parseInt(response.readEntity(String.class));
+
+	}
+
+	public static boolean songsOfPlaylist(Long pid) {
 		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/songsofplaylist");
@@ -114,12 +152,15 @@ public class WSConsumerSong {
 
 		if (response.getStatus() == 204) { //500?
 			System.out.println("There is no playlist with id "+ pid);
+			return false;
 		} else if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
+			return false;
 		} else {
 			System.out.println("******** SONGS OF PLAYLIST ("+pid+") ********\n\n");
 			System.out.println(response.readEntity(SongCollection.class));
+			return true;
 		}
 
 	}
