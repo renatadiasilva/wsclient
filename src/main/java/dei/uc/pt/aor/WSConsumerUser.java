@@ -63,7 +63,7 @@ public class WSConsumerUser {
 
 	}
 
-	public static boolean createUser(String name, String email) throws IOException {
+	public static boolean createUser(String name, String email) {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/createuser");
 		target = target.queryParam("name", name);
@@ -72,14 +72,13 @@ public class WSConsumerUser {
 		User user = new User();
 		try {
 			JAXBContext context = JAXBContext.newInstance(User.class);
-			
+
 			BufferedWriter writer = null;
-	        writer = new BufferedWriter(new FileWriter("ficheiro.xml"));
-	        Marshaller m = context.createMarshaller();
-	        m.marshal(user, writer);
-	        String xmlString = TransformXML.convertXMLFileToString("ficheiro.xml");
+			writer = new BufferedWriter(new FileWriter("ficheiro.xml"));
+			Marshaller m = context.createMarshaller();
+			m.marshal(user, writer);
+			String xmlString = TransformXML.convertXMLFileToString("ficheiro.xml");
 			Response response = target.request().post(Entity.entity(xmlString, MediaType.APPLICATION_XML));	        
-//			Response response = target.request().post(Entity.entity(user, "application/xml"));
 
 			if (response.getStatus() == 500) {
 				System.out.println("An user with email "+ email +" already exists!");
@@ -100,6 +99,9 @@ public class WSConsumerUser {
 			}
 		} catch (JAXBException e) {
 			System.out.println("Error JAXB (WSConsumerUser.createUser): "+ e.getMessage());
+			return false;
+		} catch (IOException ioe) {
+			System.out.println("Error I/O (WSConsumerUser.createUser): "+ ioe.getMessage());
 			return false;
 		}
 
@@ -162,30 +164,40 @@ public class WSConsumerUser {
 		target = target.queryParam("pass", pass);
 
 		User user = new User();
-		Response response = target.request().put(Entity.entity(user, "application/xml"));
+		try {
+			JAXBContext context = JAXBContext.newInstance(User.class);
 
-		if (response.getStatus() == 500) {
-			System.out.println("There is no user with id/email "+ idemail);
-			return false;
-		} else if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
-					+ response.getStatus());
-			return false;
-		} else {
-			System.out.println("\n* UPDATED USER WITH ID/EMAIL "+idemail+" *\n");
-			String stringUser = response.readEntity(String.class);
-			try {
-				JAXBContext context = JAXBContext.newInstance(User.class);
+			BufferedWriter writer = null;
+			writer = new BufferedWriter(new FileWriter("ficheiro.xml"));
+			Marshaller m = context.createMarshaller();
+			m.marshal(user, writer);
+			String xmlString = TransformXML.convertXMLFileToString("ficheiro.xml");
+			Response response = target.request().put(Entity.entity(xmlString, MediaType.APPLICATION_XML));	        
+
+			if (response.getStatus() == 500) {
+				System.out.println("There is no user with id/email "+ idemail);
+				return false;
+			} else if (response.getStatus() != 200) {
+				System.out.println("Failed : HTTP error code : "
+						+ response.getStatus());
+				return false;
+			} else {
+				System.out.println("\n* UPDATED USER WITH ID/EMAIL "+idemail+" *\n");
+				String stringUser = response.readEntity(String.class);
+				context = JAXBContext.newInstance(User.class);
 				Unmarshaller um = context.createUnmarshaller();
 				StringReader sreader = new StringReader(stringUser);
 				System.out.println((User) um.unmarshal(sreader));
-			} catch (JAXBException e) {
-				System.out.println("Error JAXB (WSConsumerUser.changeUserPass): "+ e.getMessage());
-				return false;
+				return true;
 			}
-			return true;
+		} catch (JAXBException e) {
+			System.out.println("Error JAXB (WSConsumerUser.changeUserPass): "+ e.getMessage());
+			return false;
+		} catch (IOException ioe) {
+			System.out.println("Error I/O (WSConsumerUser.changeUserPass): "+ ioe.getMessage());
+			return false;
 		}
-
+	
 	}
 
 }
