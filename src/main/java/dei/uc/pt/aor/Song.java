@@ -1,5 +1,8 @@
 package dei.uc.pt.aor;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="song")
 public class Song {
 	
 	private Long id;
@@ -67,10 +70,14 @@ public class Song {
 	}
 	
 	public String toString() {
-		return "Id: " + id + "\nTitle: " + title + "\nArtist: " + artist
-				+ "\nAlbum: " + album + "\nRelease Year: " + releaseYear
-				+ "\nPath File: " + pathFile + "\nAdded by: " + owner.getEmail(); 
-
+		String s = String.format("%6s: %d \n", "Id", id);
+		s += String.format("%6s: %s \n", "Title", title);
+		s += String.format("%6s: %s \n", "Artist", artist);
+		s += String.format("%6s: %s \n", "Album", album);
+		s += String.format("%6s: %d \n", "Year", releaseYear);
+		s += String.format("%6s: %s \n", "Path", pathFile);
+		s += String.format("%6s: %s \n", "Owner", owner.getEmail());
+		return s;
 	}
 	
 }

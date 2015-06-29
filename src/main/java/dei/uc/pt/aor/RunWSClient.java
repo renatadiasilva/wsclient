@@ -3,7 +3,6 @@ package dei.uc.pt.aor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Locale.Category;
 
 public class RunWSClient {
 
@@ -20,7 +19,7 @@ public class RunWSClient {
 		String answer = "1";
 
 		while (!stop) {
-			System.out.println("\n\n***** MAIN MENU *****");
+			System.out.println("\n***** MAIN MENU *****");
 			System.out.println("1 - Manage Users");
 			System.out.println("2 - Manage Playlists");
 			System.out.println("3 - Manage Songs");
@@ -83,7 +82,7 @@ public class RunWSClient {
 
 		while (!stop) {
 
-			System.out.println("\n\n***** USERS MENU *****");
+			System.out.println("\n***** USERS MENU *****");
 			System.out.println("1 - Total number of users");
 			System.out.println("2 - List all users");
 			System.out.println("3 - Consult user info");
@@ -216,7 +215,7 @@ public class RunWSClient {
 
 		while (!stop) {
 
-			System.out.println("\n\n***** PLAYLISTS MENU *****");
+			System.out.println("\n***** PLAYLISTS MENU *****");
 			System.out.println("1 - Total number of playlists");
 			System.out.println("2 - List all playlists");
 			System.out.println("3 - List playlists of user");
@@ -257,19 +256,26 @@ public class RunWSClient {
 					break;
 				case 2: WSConsumerPlaylist.listAllPlaylists(); break;
 				case 3: 
-					System.out.print("Insert the user id or email: ");
-					while (!done) {
-						data = reader.readLine();
-						if (data.matches("\\d+")) {
-							done = true;
-							WSpath = "/id";
-						} else if (data.matches(".+@.+\\.[a-z]+")) {
-							done = true;
-							WSpath = "/email";
+					total = WSConsumerUser.totalUsers();
+					if (total > 0) {
+						if (WSConsumerUser.listAllUsers()) {
+							//list all users and choose one
+							System.out.print("Insert the user id or email to show playlists: ");
+							while (!done) {
+								data = reader.readLine();
+								if (data.matches("\\d+")) {
+									done = true;
+									WSpath = "/id";
+								} else if (data.matches(".+@.+\\.[a-z]+")) {
+									done = true;
+									WSpath = "/email";
+								}
+								else System.out.print("Please insert a valid id or email: ");
+							}
+							if (WSConsumerUser.userInfo(data, WSpath))
+								WSConsumerPlaylist.playlistsOfUser(data, WSpath);
 						}
-						else System.out.print("Please insert a valid id or email: ");
-					}
-					WSConsumerPlaylist.playlistsOfUser(data, WSpath);
+					} else if (total == 0) System.out.println("There are no users");
 					break;
 				case 4: 
 					total = WSConsumerPlaylist.totalPlaylists();
@@ -285,7 +291,8 @@ public class RunWSClient {
 								}
 								else System.out.print("Please insert a valid id: ");
 							}
-							menuPlaylist(pid);
+							if (WSConsumerPlaylist.playlistInfo(pid))
+								menuPlaylist(pid);
 						}
 					} else if (total == 0) System.out.println("There are no playlists");
 					break;
@@ -312,8 +319,7 @@ public class RunWSClient {
 
 		while (!stop) {
 
-			System.out.println("\n\n***** PLAYLIST ("+pid+") MENU *****");
-			System.out.print("\nChoose an option: ");
+			System.out.println("\n***** PLAYLIST ("+pid+") MENU *****");
 			System.out.println("1 - List songs of playlist "+ pid);
 			System.out.println("2 - Add song to playlist "+ pid);
 			System.out.println("3 - Remove song from playlist "+ pid);
@@ -358,10 +364,12 @@ public class RunWSClient {
 								}
 								else System.out.print("Please insert a valid id: ");
 							}
-							WSConsumerPlaylist.updateSongPlaylist(sid, pid, "/addsongtoplaylist");				
-							WSConsumerSong.songsOfPlaylist(pid);
+							if (WSConsumerSong.songInfo(sid)) {
+								WSConsumerPlaylist.updateSongPlaylist(sid, pid, "/addsongtoplaylist");				
+								WSConsumerSong.songsOfPlaylist(pid);
+							}
 						}
-					} else if (total == 0) System.out.println("There are no playlists");
+					} else if (total == 0) System.out.println("There are no songs");
 					break;
 				case 3: 
 					total = WSConsumerSong.totalSongsOfPlaylist(pid);
@@ -405,7 +413,7 @@ public class RunWSClient {
 
 		while (!stop) {
 
-			System.out.println("\n\n***** SONGS MENU *****");
+			System.out.println("\n***** SONGS MENU *****");
 			System.out.println("1 - Total number of songs");
 			System.out.println("2 - List all songs");
 			System.out.println("3 - Consult song info");
@@ -432,7 +440,7 @@ public class RunWSClient {
 
 			Long id = 0L;
 			String data = "";
-			String WSpath = ""; //?
+			String WSpath = "";
 			boolean done = false;
 
 			try {
@@ -474,7 +482,13 @@ public class RunWSClient {
 								}
 								else System.out.print("Please insert a valid id or email: ");
 							}
-							menuUser(data, WSpath);
+
+							if (WSConsumerUser.userInfo(data, WSpath)) {
+								int totals = WSConsumerSong.totalSongsOfUser(data, WSpath);
+								if (totals > 0)
+									menuUser(data, WSpath);
+								else if (totals == 0) System.out.println("The user has no songs.");
+							}
 						}
 					} else if (total == 0) System.out.println("There are no users");
 					break;
@@ -501,11 +515,10 @@ public class RunWSClient {
 
 		while (!stop) {
 
-			System.out.println("\n\n***** USER ("+idemail+") MENU *****");
+			System.out.println("\n***** USER ("+idemail+") MENU *****");
 			System.out.println("1 - List songs of user "+ idemail);
 			System.out.println("2 - Delete song of user "+ idemail);
 			System.out.println("0 - Go back");
-			System.out.println("\n\n***** MAIN MENU *****");
 			System.out.print("\nChoose an option: ");
 
 			try {
@@ -533,25 +546,21 @@ public class RunWSClient {
 				switch (op) {
 				case 1: WSConsumerSong.songsOfUser(idemail, WSpath); break;
 				case 2:
-					int total = WSConsumerSong.totalSongsOfUser(idemail, WSpath);
-					if (total > 0) {
-						//list all songs of user, choose one to remove
-						if (WSConsumerSong.songsOfUser(idemail, WSpath)) {
-							//choose song to delete
-							System.out.print("Insert the song id to delete: ");
-							while (!done) {
-								data = reader.readLine();
-								if (data.matches("\\d+")) {
-									done = true;
-									sid = Long.parseLong(data);
-								}
-								else System.out.print("Please insert a valid id: ");
+					//list all songs of user, choose one to remove
+					if (WSConsumerSong.songsOfUser(idemail, WSpath)) {
+						//choose song to delete
+						System.out.print("Insert the song id to delete: ");
+						while (!done) {
+							data = reader.readLine();
+							if (data.matches("\\d+")) {
+								done = true;
+								sid = Long.parseLong(data);
 							}
-							//deletesongfor good?
-							WSConsumerSong.deleteSong(sid);
-							WSConsumerSong.songsOfUser(idemail, WSpath);
+							else System.out.print("Please insert a valid id: ");
 						}
-					} else if (total == 0) System.out.println("The user has no songs");
+						WSConsumerSong.deleteSong(sid);
+						WSConsumerSong.songsOfUser(idemail, WSpath);
+					}
 					break;
 				case 0: stop = true; break;
 				default: stop = false;

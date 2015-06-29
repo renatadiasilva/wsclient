@@ -22,12 +22,16 @@ public class PlaylistCollection {
 	public String toString() {
 		String s = "";
 		if ( (listPlaylists == null) || (listPlaylists.size() == 0) ) return "No playlists";
-		String su = String.format("%4s %13s %28s %20s \n", "ID", "NAME", "SIZE", "OWNER");
+		String su = String.format("%4s %12s %30s %12s %13s \n", "ID", "NAME", "DATE OF CREATION", "SIZE", "OWNER");
 		s += su;
-		s += "-------------------------------------------------------------\n";
+		s += "-------------------------------------------------------------------------------------\n";
 		for (Playlist p: listPlaylists) {
-			su = String.format("%4d  %-25s %10d %-30s \n", p.getId(), p.getName(),
-					p.getSize(), p.getOwner().getEmail());
+			
+			su = String.format("%4d %-20s %s %6d %-30s \n", p.getId(), 
+					p.getName().substring(0, Math.min(p.getName().length(),20)),
+					p.getDateOfCriation().toString(), p.getSize(),
+					p.getOwner().getEmail().substring(0, 
+							Math.min(p.getOwner().getEmail().length(),20)));
 			s += su;
 		}
 		return  s;

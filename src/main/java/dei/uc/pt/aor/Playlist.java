@@ -1,9 +1,10 @@
 package dei.uc.pt.aor;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name="playlist")
 public class Playlist {
 
 	private Long id;
@@ -52,8 +53,12 @@ public class Playlist {
 	}
 
 	public String toString() {
-		return "Id: " + id + "\nName: " + name + "\nDate of Creation: " + dateOfCriation 
-				+ "\nSize: " + size + "\nCreated by: " + owner.getEmail();
+		String s = String.format("%5s: %d \n", "Id", id);
+		s += String.format("%5s: %s \n", "Name", name);
+		s += String.format("%5s: %s \n", "Date", dateOfCriation.toString());
+		s += String.format("%5s: %s \n", "Size", size);
+		s += String.format("%5s: %s \n", "Owner", owner.getEmail());
+		return s;
 	}
 
 }

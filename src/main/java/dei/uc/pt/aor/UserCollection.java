@@ -26,7 +26,9 @@ public class UserCollection {
 		s += su;
 		s += "-------------------------------------------------------------\n";
 		for (User u: listUsers) {
-			su = String.format("%4d  %-25s %-30s \n", u.getId(), u.getName(), u.getEmail());
+			su = String.format("%4d  %-25s %-30s \n", u.getId(), 
+					u.getName().substring(0, Math.min(u.getName().length(), 20)),
+					u.getEmail().substring(0, Math.min(u.getEmail().length(), 20)));
 			s += su;
 		}
 		return  s;

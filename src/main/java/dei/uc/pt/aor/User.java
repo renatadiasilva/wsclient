@@ -1,7 +1,5 @@
 package dei.uc.pt.aor;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="user")
@@ -45,7 +43,11 @@ public class User {
 	}
 	
 	public String toString() {
-		return "Id: " + id + "\nName: " + name + "\nEmail: " + email; 
+		String s = String.format("%5s: %d \n", "Id", id);
+		s += String.format("%5s: %s \n", "Name", name);
+		s += String.format("%5s: %s \n", "Email", email);
+		s += String.format("%5s: %s \n", "Pass", password);
+		return s;
 	}
 
 }

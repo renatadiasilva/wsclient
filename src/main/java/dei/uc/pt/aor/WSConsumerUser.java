@@ -1,12 +1,7 @@
 package dei.uc.pt.aor;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -18,7 +13,6 @@ public class WSConsumerUser {
 
 	public static int totalUsers() {
 
-		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/totalusers");
 		Response response = target.request().get();
@@ -32,7 +26,6 @@ public class WSConsumerUser {
 	}
 
 	public static boolean listAllUsers() {
-		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/allusers");
 		Response response = target.request().get();
@@ -42,7 +35,7 @@ public class WSConsumerUser {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("******** LIST OF ALL USERS ********\n\n");
+			System.out.println("\n**************** LIST OF ALL USERS ****************\n");
 			System.out.println(response.readEntity(UserCollection.class));
 			return true;
 		}
@@ -50,7 +43,6 @@ public class WSConsumerUser {
 	}
 
 	public static boolean createUser(String name, String email) {
-		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/createuser");
 		target = target.queryParam("name", name);
@@ -67,7 +59,7 @@ public class WSConsumerUser {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("******** NEW USER CREATED ********\n\n");
+			System.out.println("\n* NEW USER CREATED *\n");
 			System.out.println(response.readEntity(User.class));
 			System.out.println("Default pass: 123");
 			return true;
@@ -76,7 +68,6 @@ public class WSConsumerUser {
 	}
 
 	public static boolean userInfo(String idemail, String WSpath) {
-		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+WSpath);
 		target = target.path(idemail);
@@ -90,7 +81,7 @@ public class WSConsumerUser {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("******** INFO OF USER ("+idemail+") ********\n");
+			System.out.println("\n******** INFO OF USER ("+idemail+") ********");
 			System.out.println(response.readEntity(User.class));
 			return true;
 		}
@@ -98,28 +89,26 @@ public class WSConsumerUser {
 	}
 
 	public static boolean deleteUser(String idemail, String WSpath) {
-		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/deleteuser"+WSpath);
 		target = target.path(idemail);
 		Response response = target.request().delete();
 
-//		if (Response.notModified())
-		if (response.getStatus() != 200) {
+		if (response.getStatus() == 304) {
+			System.out.println("There is no user with id/email "+ idemail);
+			return false;
+		} else if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("******** DELETED USER WITH ID/EMAIL "+idemail+" ********\n\n");
-			//ver
-//			Response.notModified();
+			System.out.println("\n* DELETED USER WITH ID/EMAIL "+idemail+" *\n");
 			return true;
 		}
 
 	}
 
 	public static boolean changeUserPass(String idemail, String pass, String WSpath) {
-		System.out.println("\nConnecting...\n");
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/changepass"+WSpath);
 		target = target.path(idemail);
@@ -136,7 +125,7 @@ public class WSConsumerUser {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("******** UPDATED USER WITH ID/EMAIL "+idemail+" ********\n\n");
+			System.out.println("\n* UPDATED USER WITH ID/EMAIL "+idemail+" *\n");
 			System.out.println(response.readEntity(User.class));
 			return true;
 		}
