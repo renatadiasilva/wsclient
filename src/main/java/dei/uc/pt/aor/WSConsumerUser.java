@@ -1,14 +1,26 @@
 package dei.uc.pt.aor;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringReader;
+
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Result;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 public class WSConsumerUser {
-	
+
 	final static private String WSurl = "http://localhost:8080/playlist-wsserver/rest/users";	
 
 	public static int totalUsers() {
@@ -35,34 +47,60 @@ public class WSConsumerUser {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("\n**************** LIST OF ALL USERS ****************\n");
-			System.out.println(response.readEntity(UserCollection.class));
+			System.out.println("\n************************ LIST OF ALL USERS ************************\n");
+			String stringUser = response.readEntity(String.class);
+			try {
+				JAXBContext context = JAXBContext.newInstance(UserCollection.class);
+				Unmarshaller um = context.createUnmarshaller();
+				StringReader sreader = new StringReader(stringUser);
+				System.out.println((UserCollection) um.unmarshal(sreader));
+			} catch (JAXBException e) {
+				System.out.println("Error JAXB (WSConsumerUser.listAllUsers): "+ e.getMessage());
+				return false;
+			}
 			return true;
 		}
 
 	}
 
-	public static boolean createUser(String name, String email) {
+	public static boolean createUser(String name, String email) throws IOException {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/createuser");
 		target = target.queryParam("name", name);
 		target = target.queryParam("email", email);
 
 		User user = new User();
-		Response response = target.request().post(Entity.entity(user, "application/xml"));
+		try {
+			JAXBContext context = JAXBContext.newInstance(User.class);
+			
+			BufferedWriter writer = null;
+	        writer = new BufferedWriter(new FileWriter("ficheiro.xml"));
+	        Marshaller m = context.createMarshaller();
+	        m.marshal(user, writer);
+	        String xmlString = TransformXML.convertXMLFileToString("ficheiro.xml");
+			Response response = target.request().post(Entity.entity(xmlString, MediaType.APPLICATION_XML));	        
+//			Response response = target.request().post(Entity.entity(user, "application/xml"));
 
-		if (response.getStatus() == 500) {
-			System.out.println("An user with email "+ email +" already exists!");
+			if (response.getStatus() == 500) {
+				System.out.println("An user with email "+ email +" already exists!");
+				return false;
+			} else if (response.getStatus() != 200) {
+				System.out.println("Failed : HTTP error code : "
+						+ response.getStatus());
+				return false;
+			} else {
+				System.out.println("\n* NEW USER CREATED *\n");
+				String stringUser = response.readEntity(String.class);
+				context = JAXBContext.newInstance(User.class);
+				Unmarshaller um = context.createUnmarshaller();
+				StringReader sreader = new StringReader(stringUser);
+				System.out.println((User) um.unmarshal(sreader));
+				System.out.println("Default pass: 123");
+				return true;
+			}
+		} catch (JAXBException e) {
+			System.out.println("Error JAXB (WSConsumerUser.createUser): "+ e.getMessage());
 			return false;
-		} else if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
-					+ response.getStatus());
-			return false;
-		} else {
-			System.out.println("\n* NEW USER CREATED *\n");
-			System.out.println(response.readEntity(User.class));
-			System.out.println("Default pass: 123");
-			return true;
 		}
 
 	}
@@ -82,7 +120,16 @@ public class WSConsumerUser {
 			return false;
 		} else {
 			System.out.println("\n******** INFO OF USER ("+idemail+") ********");
-			System.out.println(response.readEntity(User.class));
+			String stringUser = response.readEntity(String.class);
+			try {
+				JAXBContext context = JAXBContext.newInstance(User.class);
+				Unmarshaller um = context.createUnmarshaller();
+				StringReader sreader = new StringReader(stringUser);
+				System.out.println((User) um.unmarshal(sreader));
+			} catch (JAXBException e) {
+				System.out.println("Error JAXB (WSConsumerUser.userInfo): "+ e.getMessage());
+				return false;
+			}
 			return true;
 		}
 
@@ -126,7 +173,16 @@ public class WSConsumerUser {
 			return false;
 		} else {
 			System.out.println("\n* UPDATED USER WITH ID/EMAIL "+idemail+" *\n");
-			System.out.println(response.readEntity(User.class));
+			String stringUser = response.readEntity(String.class);
+			try {
+				JAXBContext context = JAXBContext.newInstance(User.class);
+				Unmarshaller um = context.createUnmarshaller();
+				StringReader sreader = new StringReader(stringUser);
+				System.out.println((User) um.unmarshal(sreader));
+			} catch (JAXBException e) {
+				System.out.println("Error JAXB (WSConsumerUser.changeUserPass): "+ e.getMessage());
+				return false;
+			}
 			return true;
 		}
 
