@@ -1,5 +1,6 @@
 package dei.uc.pt.aor.data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -55,7 +56,9 @@ public class Playlist {
 	public String toString() {
 		String s = String.format("%5s: %d \n", "Id", id);
 		s += String.format("%5s: %s \n", "Name", name);
-		s += String.format("%5s: %s \n", "Date", dateOfCriation.toString());
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
+	    String date = DATE_FORMAT.format(dateOfCriation);
+		s += String.format("%5s: %s \n", "Date", date);
 		s += String.format("%5s: %s \n", "Size", size);
 		s += String.format("%5s: %s \n", "Owner", owner.getEmail());
 		return s;

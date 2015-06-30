@@ -128,10 +128,10 @@ public class WSConsumerPlaylist {
 		ResteasyWebTarget target = client.target(WSurl+WSpath);
 		target = target.queryParam("song", sid);
 		target = target.queryParam("playlist", pid);
-
+		
 		Playlist p = new Playlist();
 		try {
-			JAXBContext context = JAXBContext.newInstance(User.class);
+			JAXBContext context = JAXBContext.newInstance(Playlist.class);
 
 			BufferedWriter writer = null;
 			writer = new BufferedWriter(new FileWriter("ficheiro.xml"));
@@ -152,10 +152,11 @@ public class WSConsumerPlaylist {
 				return true;
 			}
 		} catch (JAXBException e) {
-			System.out.println("Error JAXB (WSConsumerUser.changeUserPass): "+ e.getMessage());
+			e.printStackTrace();
+			System.out.println("Error JAXB (WSConsumerPlaylist.updateSongPlaylist): "+ e.getMessage());
 			return false;
 		} catch (IOException ioe) {
-			System.out.println("Error I/O (WSConsumerUser.changeUserPass): "+ ioe.getMessage());
+			System.out.println("Error I/O (WSConsumerPlaylist.updateSongPlaylist): "+ ioe.getMessage());
 			return false;
 		}
 

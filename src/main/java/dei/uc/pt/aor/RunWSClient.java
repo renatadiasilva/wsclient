@@ -158,10 +158,16 @@ public class RunWSClient {
 						WSConsumerUser.userInfo(data1, WSpath);
 					} else if (total == 0) System.out.println("***** There are no users *****");
 					break;
-				case 4: // Total number of logged users //check first
-					WSConsumerUser.totalLoggedUsers(); break;
+				case 4: // Total number of logged users
+					total = WSConsumerUser.totalLoggedUsers();
+					if (total >= 0) {
+						System.out.print("Total number of logged users: ");
+						System.out.println(total);
+					}
+					break;
 				case 5: // List all logged users
-					WSConsumerUser.listAllLoggedUsers(); break;
+					WSConsumerUser.listAllLoggedUsers();
+					break;
 				case 6: // Create new user
 					System.out.print("Insert the name: ");
 					data1 = reader.readLine();
