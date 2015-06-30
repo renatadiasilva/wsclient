@@ -1,4 +1,4 @@
-package dei.uc.pt.aor;
+package dei.uc.pt.aor.wsconsumer;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -11,13 +11,15 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.Result;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+
+import dei.uc.pt.aor.data.User;
+import dei.uc.pt.aor.data.UserCollection;
+import dei.uc.pt.aor.xml.TransformXML;
 
 public class WSConsumerUser {
 

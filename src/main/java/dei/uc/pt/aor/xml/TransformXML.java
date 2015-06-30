@@ -1,4 +1,4 @@
-package dei.uc.pt.aor;
+package dei.uc.pt.aor.xml;
 
 
 import java.io.File;

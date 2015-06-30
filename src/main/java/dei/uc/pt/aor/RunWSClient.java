@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import dei.uc.pt.aor.wsconsumer.WSConsumerPlaylist;
+import dei.uc.pt.aor.wsconsumer.WSConsumerSong;
+import dei.uc.pt.aor.wsconsumer.WSConsumerUser;
+
 public class RunWSClient {
 
 	public static void main(String[] args) {
@@ -558,8 +562,8 @@ public class RunWSClient {
 							}
 							else System.out.print("Please insert a valid id: ");
 						}
-						WSConsumerSong.deleteSong(sid);
-						WSConsumerSong.songsOfUser(idemail, WSpath);
+						if (WSConsumerSong.deleteSong(sid, idemail, WSpath))
+							WSConsumerSong.songsOfUser(idemail, WSpath);
 					}
 					break;
 				case 0: stop = true; break;

@@ -1,4 +1,4 @@
-package dei.uc.pt.aor;
+package dei.uc.pt.aor.data;
 
 import java.util.List;
 

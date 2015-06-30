@@ -1,4 +1,4 @@
-package dei.uc.pt.aor;
+package dei.uc.pt.aor.wsconsumer;
 
 import java.io.StringReader;
 
@@ -10,6 +10,9 @@ import javax.xml.bind.Unmarshaller;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+
+import dei.uc.pt.aor.data.Song;
+import dei.uc.pt.aor.data.SongCollection;
 
 public class WSConsumerSong {
 
@@ -84,21 +87,23 @@ public class WSConsumerSong {
 
 	}
 	
-	public static boolean deleteSong(Long id) {
+	public static boolean deleteSong(Long sid, String idemail, String WSpath) {
 		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget target = client.target(WSurl+"/deletesong");
-		target = target.path(""+id);
+		ResteasyWebTarget target = client.target(WSurl+"/deletesongofuser"+WSpath);
+		target = target.queryParam("sid", sid);
+		target = target.queryParam("idemail", idemail);
 		Response response = target.request().delete();
 
 		if (response.getStatus() == 304) {
-			System.out.println("There is no song with id "+ id);
+			System.out.println("There is no song with id "+ sid + "added by user with"
+					+ "id/email "+idemail);
 			return false;
 		} else if (response.getStatus() != 200) {
 			System.out.println("Failed : HTTP error code : "
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("\n* DELETED SONG WITH ID "+id+" *\n");
+			System.out.println("\n* THE SONG WITH ID "+sid+" now belongs to ADMIN*\n");
 			return true;
 		}
 

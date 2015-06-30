@@ -1,4 +1,4 @@
-package dei.uc.pt.aor;
+package dei.uc.pt.aor.wsconsumer;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -16,6 +16,11 @@ import javax.xml.bind.Unmarshaller;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+
+import dei.uc.pt.aor.data.Playlist;
+import dei.uc.pt.aor.data.PlaylistCollection;
+import dei.uc.pt.aor.data.User;
+import dei.uc.pt.aor.xml.TransformXML;
 
 public class WSConsumerPlaylist {
 
@@ -45,7 +50,7 @@ public class WSConsumerPlaylist {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("\n**************** LIST OF ALL PLAYLISTS ****************\n");
+			System.out.println("\n********************** LIST OF ALL PLAYLISTS **********************\n");
 			String stringUser = response.readEntity(String.class);
 			try {
 				JAXBContext context = JAXBContext.newInstance(PlaylistCollection.class);
