@@ -39,6 +39,20 @@ public class WSConsumerUser {
 
 	}
 
+	public static int totalLoggedUsers() {
+
+		ResteasyClient client = new ResteasyClientBuilder().build();
+		ResteasyWebTarget target = client.target(WSurl+"/totalloggedusers");
+		Response response = target.request().get();
+
+		if (response.getStatus() != 200) {
+			System.out.println("Failed : HTTP error code : "
+					+ response.getStatus());
+			return -1;
+		} else return Integer.parseInt(response.readEntity(String.class));
+
+	}
+
 	public static boolean listAllUsers() {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/allusers");
@@ -58,6 +72,32 @@ public class WSConsumerUser {
 				System.out.println((UserCollection) um.unmarshal(sreader));
 			} catch (JAXBException e) {
 				System.out.println("Error JAXB (WSConsumerUser.listAllUsers): "+ e.getMessage());
+				return false;
+			}
+			return true;
+		}
+
+	}
+
+	public static boolean listAllLoggedUsers() {
+		ResteasyClient client = new ResteasyClientBuilder().build();
+		ResteasyWebTarget target = client.target(WSurl+"/loggedusers");
+		Response response = target.request().get();
+
+		if (response.getStatus() != 200) {
+			System.out.println("Failed : HTTP error code : "
+					+ response.getStatus());
+			return false;
+		} else {
+			System.out.println("\n************************ LIST OF LOGGED USERS ************************\n");
+			String stringUser = response.readEntity(String.class);
+			try {
+				JAXBContext context = JAXBContext.newInstance(UserCollection.class);
+				Unmarshaller um = context.createUnmarshaller();
+				StringReader sreader = new StringReader(stringUser);
+				System.out.println((UserCollection) um.unmarshal(sreader));
+			} catch (JAXBException e) {
+				System.out.println("Error JAXB (WSConsumerUser.listAllLoggedUsers): "+ e.getMessage());
 				return false;
 			}
 			return true;

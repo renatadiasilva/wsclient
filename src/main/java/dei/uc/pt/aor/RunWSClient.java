@@ -159,11 +159,9 @@ public class RunWSClient {
 					} else if (total == 0) System.out.println("***** There are no users *****");
 					break;
 				case 4: // Total number of logged users //check first
-					//WSConsumerUser.totalLoggedUsers(); 
-					System.out.println("Not implemented yet"); break;
+					WSConsumerUser.totalLoggedUsers(); break;
 				case 5: // List all logged users
-					//WSConsumerUser.listLoggedUsers(); break;
-					System.out.println("Not implemented yet"); break;
+					WSConsumerUser.listAllLoggedUsers(); break;
 				case 6: // Create new user
 					System.out.print("Insert the name: ");
 					data1 = reader.readLine();
