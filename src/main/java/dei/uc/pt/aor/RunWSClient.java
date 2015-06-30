@@ -27,17 +27,19 @@ public class RunWSClient {
 			System.out.println("1 - Manage Users");
 			System.out.println("2 - Manage Playlists");
 			System.out.println("3 - Manage Songs");
-			System.out.println("0 - Quit");
+			System.out.println("Q - Quit");
 			System.out.print("\nChoose an option: ");
 
 			try {
 				answer = reader.readLine();
 			} catch (IOException e) {
 				System.out.println("Error reading input.");
-				stop = true;
-				answer = "0";
+				answer = "100";
 			}
 
+			if ( (answer.charAt(0)=='q') || (answer.charAt(0)=='Q') )
+				break;
+			
 			System.out.println("\n");
 
 			int op = 1000;
@@ -49,33 +51,31 @@ public class RunWSClient {
 
 			switch (op) {
 			case 1: // Manage users
-				menuUser();
+				stop = menuUser();
 				break;
 			case 2: // Manage playlists
-				menuPlaylist();
+				stop = menuPlaylist();
 				break;
 			case 3: // Manage songs
-				menuSong();
-				break;
-			case 0: // Exit application
-				System.out.println("Exiting...");
-				try {
-					reader.close();
-				} catch (IOException e) {
-					System.out.println("Error closing BufferedReader.");
-				}
-				System.out.println("Goodbye!");
-				stop = true; 
+				stop = menuSong();
 				break;
 			default: // Repeat menu
 				stop = false;
 			}
 		}
 
-		System.out.println();
+		// Exit application
+		System.out.println("Exiting...");
+		try {
+			reader.close();
+		} catch (IOException e) {
+			System.out.println("Error closing BufferedReader.");
+		}
+		System.out.println("Goodbye!\n");
+		
 	}
 
-	public static void menuUser() {
+	public static boolean menuUser() {
 
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(System.in));
@@ -94,7 +94,8 @@ public class RunWSClient {
 			System.out.println("6 - Create new user");
 			System.out.println("7 - Delete user");
 			System.out.println("8 - Change user pass");
-			System.out.println("0 - Go back");
+			System.out.println("G - Go back");
+			System.out.println("Q - Quit");
 			System.out.print("\nChoose an option: ");
 
 			try {
@@ -103,6 +104,14 @@ public class RunWSClient {
 				System.out.println("Error reading input.");
 				answer = "100";
 			}
+
+			// Go back
+			if ( (answer.charAt(0)=='g') || (answer.charAt(0)=='G') )
+				return false;
+			
+			// Quit
+			if ( (answer.charAt(0)=='q') || (answer.charAt(0)=='Q') )
+				return true;
 
 			System.out.println("\n");
 
@@ -209,9 +218,6 @@ public class RunWSClient {
 						WSConsumerUser.changeUserPass(data1, data2, WSpath);
 					} else if (total == 0) System.out.println("***** There are no users *****");
 					break;
-				case 0: // Go back
-					stop = true; 
-					break;
 				default: // Repeat menu
 					stop = false;
 				}
@@ -221,10 +227,12 @@ public class RunWSClient {
 			}
 
 		}
+		
+		return true;
 
 	}
 
-	public static void menuPlaylist() {
+	public static boolean menuPlaylist() {
 
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(System.in));
@@ -239,7 +247,8 @@ public class RunWSClient {
 			System.out.println("2 - List all playlists");
 			System.out.println("3 - List playlists of user");
 			System.out.println("4 - Add/Remove songs to playlist");
-			System.out.println("0 - Go back");
+			System.out.println("G - Go back");
+			System.out.println("Q - Quit");
 			System.out.print("\nChoose an option: ");
 
 			try {
@@ -248,6 +257,14 @@ public class RunWSClient {
 				System.out.println("Error reading input.");
 				answer = "100";
 			}
+
+			// Go back
+			if ( (answer.charAt(0)=='g') || (answer.charAt(0)=='G') )
+				return false;
+			
+			// Quit
+			if ( (answer.charAt(0)=='q') || (answer.charAt(0)=='Q') )
+				return true;
 
 			System.out.println("\n");
 
@@ -312,12 +329,9 @@ public class RunWSClient {
 								else System.out.print("Please insert a valid id: ");
 							}
 							if (WSConsumerPlaylist.playlistInfo(pid))
-								menuPlaylist(pid);
+								stop = menuPlaylist(pid);
 						}
 					} else if (total == 0) System.out.println("***** There are no playlists *****");
-					break;
-				case 0: // Go back
-					stop = true;
 					break;
 				default: // Repeat menu
 					stop = false;
@@ -328,10 +342,12 @@ public class RunWSClient {
 			}
 
 		}
+		
+		return true;
 
 	}
 
-	public static void menuPlaylist(Long pid) {
+	public static boolean menuPlaylist(Long pid) {
 
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(System.in));
@@ -345,7 +361,8 @@ public class RunWSClient {
 			System.out.println("1 - List songs of playlist "+ pid);
 			System.out.println("2 - Add song to playlist "+ pid);
 			System.out.println("3 - Remove song from playlist "+ pid);
-			System.out.println("0 - Go back");
+			System.out.println("G - Go back");
+			System.out.println("Q - Quit");
 			System.out.print("\nChoose an option: ");
 
 			try {
@@ -354,6 +371,14 @@ public class RunWSClient {
 				System.out.println("Error reading input.");
 				answer = "100";
 			}
+
+			// Go back
+			if ( (answer.charAt(0)=='g') || (answer.charAt(0)=='G') )
+				return false;
+			
+			// Quit
+			if ( (answer.charAt(0)=='q') || (answer.charAt(0)=='Q') )
+				return true;
 
 			System.out.println("\n");
 
@@ -413,8 +438,6 @@ public class RunWSClient {
 						}
 					} else if (total == 0) System.out.println("***** There are no songs in the playlist *****");
 					break;
-				case 0: // Go back
-					stop = true; break;
 				default: // Repeat menu
 					stop = false;
 				}
@@ -424,10 +447,12 @@ public class RunWSClient {
 			}
 
 		}
+		
+		return true;
 
 	}
 
-	public static void menuSong() {
+	public static boolean menuSong() {
 
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(System.in));
@@ -442,7 +467,8 @@ public class RunWSClient {
 			System.out.println("2 - List all songs");
 			System.out.println("3 - Consult song info");
 			System.out.println("4 - Delete songs of user");
-			System.out.println("0 - Go back");
+			System.out.println("G - Go back");
+			System.out.println("Q - Quit");
 			System.out.print("\nChoose an option: ");
 
 			try {
@@ -451,6 +477,14 @@ public class RunWSClient {
 				System.out.println("Error reading input.");
 				answer = "100";
 			}
+
+			// Go back
+			if ( (answer.charAt(0)=='g') || (answer.charAt(0)=='G') )
+				return false;
+			
+			// Quit
+			if ( (answer.charAt(0)=='q') || (answer.charAt(0)=='Q') )
+				return true;
 
 			System.out.println("\n");
 
@@ -513,14 +547,11 @@ public class RunWSClient {
 							if (WSConsumerUser.userInfo(data, WSpath)) {
 								int totals = WSConsumerSong.totalSongsOfUser(data, WSpath);
 								if (totals > 0)
-									menuUser(data, WSpath);
+									stop = menuUser(data, WSpath);
 								else if (totals == 0) System.out.println("***** The user has no songs *****");
 							}
 						}
 					} else if (total == 0) System.out.println("***** There are no users *****");
-					break;
-				case 0: // Go back
-					stop = true;
 					break;
 				default: // Repeat menu
 					stop = false;
@@ -531,10 +562,12 @@ public class RunWSClient {
 			}
 
 		}
+		
+		return true;
 
 	}
 
-	public static void menuUser(String idemail, String WSpath) {
+	public static boolean menuUser(String idemail, String WSpath) {
 
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(System.in));
@@ -547,7 +580,8 @@ public class RunWSClient {
 			System.out.println("\n***** USER ("+idemail+") MENU *****");
 			System.out.println("1 - List songs of user "+ idemail);
 			System.out.println("2 - Delete song of user "+ idemail);
-			System.out.println("0 - Go back");
+			System.out.println("G - Go back");
+			System.out.println("Q - Quit");
 			System.out.print("\nChoose an option: ");
 
 			try {
@@ -556,6 +590,14 @@ public class RunWSClient {
 				System.out.println("Error reading input.");
 				answer = "100";
 			}
+
+			// Go back
+			if ( (answer.charAt(0)=='g') || (answer.charAt(0)=='G') )
+				return false;
+			
+			// Quit
+			if ( (answer.charAt(0)=='q') || (answer.charAt(0)=='Q') )
+				return true;
 
 			System.out.println("\n");
 
@@ -591,9 +633,6 @@ public class RunWSClient {
 							WSConsumerSong.songsOfUser(idemail, WSpath);
 					}
 					break;
-				case 0: // Go back
-					stop = true;
-					break;
 				default: // Repeat menu
 					stop = false;
 				}
@@ -603,6 +642,8 @@ public class RunWSClient {
 			}
 
 		}
+		
+		return true;
 
 	}
 

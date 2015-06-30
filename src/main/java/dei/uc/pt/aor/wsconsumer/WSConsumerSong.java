@@ -91,11 +91,11 @@ public class WSConsumerSong {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget target = client.target(WSurl+"/deletesongofuser"+WSpath);
 		target = target.queryParam("sid", sid);
-		target = target.queryParam("idemail", idemail);
+		target = target.queryParam("uidemail", idemail);
 		Response response = target.request().delete();
-
+		
 		if (response.getStatus() == 304) {
-			System.out.println("There is no song with id "+ sid + "added by user with"
+			System.out.println("There is no song with id "+ sid + " added by user with "
 					+ "id/email "+idemail);
 			return false;
 		} else if (response.getStatus() != 200) {
@@ -103,7 +103,7 @@ public class WSConsumerSong {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("\n* THE SONG WITH ID "+sid+" now belongs to ADMIN*\n");
+			System.out.println("\n* THE SONG WITH ID "+sid+" now belongs to ADMIN *\n");
 			return true;
 		}
 
