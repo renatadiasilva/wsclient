@@ -24,7 +24,7 @@ public class WSConsumerSong {
 		Response response = target.request().get();
 
 		if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
+			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
 			return -1;
 		} else return Integer.parseInt(response.readEntity(String.class));
@@ -37,7 +37,7 @@ public class WSConsumerSong {
 		Response response = target.request().get();
 
 		if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
+			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
 			return false;
 		} else {
@@ -49,7 +49,7 @@ public class WSConsumerSong {
 				StringReader sreader = new StringReader(stringSong);
 				System.out.println((SongCollection) um.unmarshal(sreader));
 			} catch (JAXBException e) {
-				System.out.println("Error JAXB (WSConsumerSong.listAllSongs): "+ e.getMessage());
+				System.out.println("\nError JAXB (WSConsumerSong.listAllSongs): "+ e.getMessage());
 				return false;
 			}
 			return true;
@@ -64,10 +64,10 @@ public class WSConsumerSong {
 		Response response = target.request().get();
 
 		if (response.getStatus() == 204) {
-			System.out.println("There is no song with id "+ id);
+			System.out.println("\n* There is no song with id "+ id +" *");
 			return false;
 		} else if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
+			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
 			return false;
 		} else {
@@ -79,7 +79,7 @@ public class WSConsumerSong {
 				StringReader sreader = new StringReader(stringSong);
 				System.out.println((Song) um.unmarshal(sreader));
 			} catch (JAXBException e) {
-				System.out.println("Error JAXB (WSConsumerSong.SongInfo): "+ e.getMessage());
+				System.out.println("\nError JAXB (WSConsumerSong.SongInfo): "+ e.getMessage());
 				return false;
 			}
 			return true;
@@ -95,11 +95,11 @@ public class WSConsumerSong {
 		Response response = target.request().delete();
 		
 		if (response.getStatus() == 304) {
-			System.out.println("There is no song with id "+ sid + " added by user with "
-					+ "id/email "+idemail);
+			System.out.println("\n* There is no song with id "+ sid + " added by user with "
+					+ "id/email "+idemail +" *");
 			return false;
 		} else if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
+			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
 			return false;
 		} else {
@@ -116,7 +116,7 @@ public class WSConsumerSong {
 		Response response = target.request().get();
 
 		if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
+			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
 			return -1;
 		} else return Integer.parseInt(response.readEntity(String.class));
@@ -130,7 +130,7 @@ public class WSConsumerSong {
 		Response response = target.request().get();
 		
 		if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
+			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
 			return false;
 		} else {
@@ -142,7 +142,7 @@ public class WSConsumerSong {
 				StringReader sreader = new StringReader(stringSong);
 				System.out.println((SongCollection) um.unmarshal(sreader));
 			} catch (JAXBException e) {
-				System.out.println("Error JAXB (WSConsumerSong.SongsOfUser): "+ e.getMessage());
+				System.out.println("\nError JAXB (WSConsumerSong.SongsOfUser): "+ e.getMessage());
 				return false;
 			}
 			return true;
@@ -157,7 +157,7 @@ public class WSConsumerSong {
 		Response response = target.request().get();
 
 		if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
+			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
 			return -1;
 		} else return Integer.parseInt(response.readEntity(String.class));
@@ -171,7 +171,7 @@ public class WSConsumerSong {
 		Response response = target.request().get();
 
 		if (response.getStatus() != 200) {
-			System.out.println("Failed : HTTP error code : "
+			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
 			return false;
 		} else {
@@ -183,7 +183,7 @@ public class WSConsumerSong {
 				StringReader sreader = new StringReader(stringSong);
 				System.out.println((SongCollection) um.unmarshal(sreader));
 			} catch (JAXBException e) {
-				System.out.println("Error JAXB (WSConsumerSong.songOfPlaylist): "+ e.getMessage());
+				System.out.println("\nError JAXB (WSConsumerSong.songOfPlaylist): "+ e.getMessage());
 				return false;
 			}
 			return true;
