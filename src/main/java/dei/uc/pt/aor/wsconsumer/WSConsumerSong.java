@@ -37,7 +37,7 @@ public class WSConsumerSong {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("\n************************ LIST OF ALL SONGS ************************\n");
+			System.out.println("\n******************************* LIST OF ALL SONGS ******************************\n");
 			String stringSong = response.readEntity(String.class);
 			System.out.println((SongCollection) TransformXML.XMLToEntity(SongCollection.class, stringSong));
 			return true;
@@ -114,7 +114,7 @@ public class WSConsumerSong {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("\n**************** SONGS OF USER ("+idemail+") ****************\n");
+			System.out.println("\n****************************** SONGS OF USER ("+idemail+") ******************************\n");
 			String stringSong = response.readEntity(String.class);
 			System.out.println((SongCollection) TransformXML.XMLToEntity(SongCollection.class, stringSong));
 			return true;
@@ -147,7 +147,7 @@ public class WSConsumerSong {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("\n**************** SONGS OF PLAYLIST ("+pid+") ****************\n");
+			System.out.println("\n**************************** SONGS OF PLAYLIST ("+pid+") ****************************\n");
 			String stringSong = response.readEntity(String.class);
 			System.out.println((SongCollection) TransformXML.XMLToEntity(SongCollection.class, stringSong));
 			return true;

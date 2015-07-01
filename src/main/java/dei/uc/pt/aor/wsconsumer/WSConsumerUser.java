@@ -100,7 +100,7 @@ public class WSConsumerUser {
 			System.out.println("\n* NEW USER CREATED *\n");
 			String stringUser = response.readEntity(String.class);
 			System.out.println((User) TransformXML.XMLToEntity(User.class, stringUser));
-			System.out.println("Default pass: 123");
+			System.out.println("(Default pass: 123)");
 			return true;
 		}
 

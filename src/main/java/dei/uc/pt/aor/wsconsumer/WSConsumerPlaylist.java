@@ -81,7 +81,7 @@ public class WSConsumerPlaylist {
 					+ response.getStatus());
 			return false;
 		} else {
-			System.out.println("\n**************** PLAYLISTS OF USER ("+idemail+") ****************\n");
+			System.out.println("\n************************ PLAYLISTS OF USER ("+idemail+") ************************\n");
 			String stringPlaylist = response.readEntity(String.class);
 			System.out.println((PlaylistCollection) TransformXML.XMLToEntity(PlaylistCollection.class, stringPlaylist));
 			return true;
