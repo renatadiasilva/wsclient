@@ -1,11 +1,6 @@
 package dei.uc.pt.aor.wsconsumer;
 
-import java.io.StringReader;
-
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -13,6 +8,7 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
 import dei.uc.pt.aor.data.Song;
 import dei.uc.pt.aor.data.SongCollection;
+import dei.uc.pt.aor.xml.TransformXML;
 
 public class WSConsumerSong {
 
@@ -43,15 +39,7 @@ public class WSConsumerSong {
 		} else {
 			System.out.println("\n************************ LIST OF ALL SONGS ************************\n");
 			String stringSong = response.readEntity(String.class);
-			try {
-				JAXBContext context = JAXBContext.newInstance(SongCollection.class);
-				Unmarshaller um = context.createUnmarshaller();
-				StringReader sreader = new StringReader(stringSong);
-				System.out.println((SongCollection) um.unmarshal(sreader));
-			} catch (JAXBException e) {
-				System.out.println("\nError JAXB (WSConsumerSong.listAllSongs): "+ e.getMessage());
-				return false;
-			}
+			System.out.println((SongCollection) TransformXML.XMLToEntity(SongCollection.class, stringSong));
 			return true;
 		}
 
@@ -73,15 +61,7 @@ public class WSConsumerSong {
 		} else {
 			System.out.println("\n******** INFO OF SONG ("+id+") ********\n");
 			String stringSong = response.readEntity(String.class);
-			try {
-				JAXBContext context = JAXBContext.newInstance(Song.class);
-				Unmarshaller um = context.createUnmarshaller();
-				StringReader sreader = new StringReader(stringSong);
-				System.out.println((Song) um.unmarshal(sreader));
-			} catch (JAXBException e) {
-				System.out.println("\nError JAXB (WSConsumerSong.SongInfo): "+ e.getMessage());
-				return false;
-			}
+			System.out.println((Song) TransformXML.XMLToEntity(Song.class, stringSong));
 			return true;
 		}
 
@@ -136,15 +116,7 @@ public class WSConsumerSong {
 		} else {
 			System.out.println("\n**************** SONGS OF USER ("+idemail+") ****************\n");
 			String stringSong = response.readEntity(String.class);
-			try {
-				JAXBContext context = JAXBContext.newInstance(SongCollection.class);
-				Unmarshaller um = context.createUnmarshaller();
-				StringReader sreader = new StringReader(stringSong);
-				System.out.println((SongCollection) um.unmarshal(sreader));
-			} catch (JAXBException e) {
-				System.out.println("\nError JAXB (WSConsumerSong.SongsOfUser): "+ e.getMessage());
-				return false;
-			}
+			System.out.println((SongCollection) TransformXML.XMLToEntity(SongCollection.class, stringSong));
 			return true;
 		}
 
@@ -177,15 +149,7 @@ public class WSConsumerSong {
 		} else {
 			System.out.println("\n**************** SONGS OF PLAYLIST ("+pid+") ****************\n");
 			String stringSong = response.readEntity(String.class);
-			try {
-				JAXBContext context = JAXBContext.newInstance(SongCollection.class);
-				Unmarshaller um = context.createUnmarshaller();
-				StringReader sreader = new StringReader(stringSong);
-				System.out.println((SongCollection) um.unmarshal(sreader));
-			} catch (JAXBException e) {
-				System.out.println("\nError JAXB (WSConsumerSong.songOfPlaylist): "+ e.getMessage());
-				return false;
-			}
+			System.out.println((SongCollection) TransformXML.XMLToEntity(SongCollection.class, stringSong));
 			return true;
 		}
 

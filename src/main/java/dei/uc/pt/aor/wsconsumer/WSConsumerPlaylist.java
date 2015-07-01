@@ -1,17 +1,8 @@
 package dei.uc.pt.aor.wsconsumer;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringReader;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -50,16 +41,8 @@ public class WSConsumerPlaylist {
 			return false;
 		} else {
 			System.out.println("\n********************** LIST OF ALL PLAYLISTS **********************\n");
-			String stringUser = response.readEntity(String.class);
-			try {
-				JAXBContext context = JAXBContext.newInstance(PlaylistCollection.class);
-				Unmarshaller um = context.createUnmarshaller();
-				StringReader sreader = new StringReader(stringUser);
-				System.out.println((PlaylistCollection) um.unmarshal(sreader));
-			} catch (JAXBException e) {
-				System.out.println("Error JAXB (WSConsumerPlaylist.listAllPlaylist): "+ e.getMessage());
-				return false;
-			}
+			String stringPlaylist = response.readEntity(String.class);
+			System.out.println((PlaylistCollection) TransformXML.XMLToEntity(PlaylistCollection.class, stringPlaylist));
 			return true;
 		}
 
@@ -80,16 +63,8 @@ public class WSConsumerPlaylist {
 			return false;
 		} else {
 			System.out.println("\n******** INFO OF PLAYLIST ("+id+") ********\n");
-			String stringUser = response.readEntity(String.class);
-			try {
-				JAXBContext context = JAXBContext.newInstance(Playlist.class);
-				Unmarshaller um = context.createUnmarshaller();
-				StringReader sreader = new StringReader(stringUser);
-				System.out.println((Playlist) um.unmarshal(sreader));
-			} catch (JAXBException e) {
-				System.out.println("\nError JAXB (WSConsumerPlaylist.playlistInfo): "+ e.getMessage());
-				return false;
-			}
+			String stringPlaylist = response.readEntity(String.class);
+			System.out.println((Playlist) TransformXML.XMLToEntity(Playlist.class, stringPlaylist));
 			return true;
 		}
 
@@ -107,16 +82,8 @@ public class WSConsumerPlaylist {
 			return false;
 		} else {
 			System.out.println("\n**************** PLAYLISTS OF USER ("+idemail+") ****************\n");
-			String stringUser = response.readEntity(String.class);
-			try {
-				JAXBContext context = JAXBContext.newInstance(PlaylistCollection.class);
-				Unmarshaller um = context.createUnmarshaller();
-				StringReader sreader = new StringReader(stringUser);
-				System.out.println((PlaylistCollection) um.unmarshal(sreader));
-			} catch (JAXBException e) {
-				System.out.println("\nError JAXB (WSConsumerPlaylist.playlistOfUser): "+ e.getMessage());
-				return false;
-			}
+			String stringPlaylist = response.readEntity(String.class);
+			System.out.println((PlaylistCollection) TransformXML.XMLToEntity(PlaylistCollection.class, stringPlaylist));
 			return true;
 		}
 
@@ -127,35 +94,20 @@ public class WSConsumerPlaylist {
 		ResteasyWebTarget target = client.target(WSurl+WSpath);
 		target = target.queryParam("song", sid);
 		target = target.queryParam("playlist", pid);
-		
-		Playlist p = new Playlist();
-		try {
-			JAXBContext context = JAXBContext.newInstance(Playlist.class);
 
-			BufferedWriter writer = null;
-			writer = new BufferedWriter(new FileWriter("ficheiro.xml"));
-			Marshaller m = context.createMarshaller();
-			m.marshal(p, writer);
-			String xmlString = TransformXML.convertXMLFileToString("ficheiro.xml");
-			Response response = target.request().put(Entity.entity(xmlString, MediaType.APPLICATION_XML));	        
+		String xmlString = TransformXML.entityToXML(Playlist.class, new Playlist());
+		Response response = target.request().put(Entity.entity(xmlString, MediaType.APPLICATION_XML));	        
 
-			if (response.getStatus() == 500) {
-				System.out.println("\n* There is no song with id "+ sid + " in playlist with id " + pid +" *");
-				return false;
-			} else if (response.getStatus() != 200) {
-				System.out.println("\nFailed : HTTP error code : "
-						+ response.getStatus());
-				return false;
-			} else {
-				System.out.println("\n* UPDATED PLAYLIST ("+pid+") *\n");
-				return true;
-			}
-		} catch (JAXBException e) {
-			System.out.println("\nError JAXB (WSConsumerPlaylist.updateSongPlaylist): "+ e.getMessage());
+		if (response.getStatus() == 500) {
+			System.out.println("\n* There is no song with id "+ sid + " in playlist with id " + pid +" *");
 			return false;
-		} catch (IOException ioe) {
-			System.out.println("\nError I/O (WSConsumerPlaylist.updateSongPlaylist): "+ ioe.getMessage());
+		} else if (response.getStatus() != 200) {
+			System.out.println("\nFailed : HTTP error code : "
+					+ response.getStatus());
 			return false;
+		} else {
+			System.out.println("\n* UPDATED PLAYLIST ("+pid+") *\n");
+			return true;
 		}
 
 	}
