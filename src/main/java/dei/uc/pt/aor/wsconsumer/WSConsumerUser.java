@@ -89,7 +89,7 @@ public class WSConsumerUser {
 		String xmlString = TransformXML.entityToXML(User.class, new User());
 		Response response = target.request().post(Entity.entity(xmlString, MediaType.APPLICATION_XML));	        
 
-		if (response.getStatus() == 500) {
+		if (response.getStatus() == 598) {
 			System.out.println("\n* An user with email "+ email +" already exists *");
 			return false;
 		} else if (response.getStatus() != 200) {
@@ -157,7 +157,7 @@ public class WSConsumerUser {
 		String xmlString = TransformXML.entityToXML(User.class, new User());
 		Response response = target.request().put(Entity.entity(xmlString, MediaType.APPLICATION_XML));	        
 
-		if (response.getStatus() == 500) {
+		if (response.getStatus() == 598) {
 			System.out.println("\n* There is no user with id/email "+ idemail +" *");
 			return false;
 		} else if (response.getStatus() != 200) {
