@@ -32,6 +32,7 @@ public class RunWSClient {
 
 			try {
 				answer = reader.readLine();
+				if (answer.equals("")) answer = "100";									
 			} catch (IOException e) {
 				System.out.println("Error reading input.");
 				answer = "100";
@@ -100,6 +101,7 @@ public class RunWSClient {
 
 			try {
 				answer = reader.readLine();
+				if (answer.equals("")) answer = "100";									
 			} catch (IOException e) {
 				System.out.println("Error reading input.");
 				answer = "100";
@@ -198,6 +200,7 @@ public class RunWSClient {
 						}
 						System.out.println("Are you sure you want to delete user with id "+data1+" (y/n)?");
 						data2 = reader.readLine();
+						if (answer.equals("")) answer = "n";									
 						if ( (data2.charAt(0)=='Y') || (data2.charAt(0)=='y') )
 							WSConsumerUser.deleteUser(data1, WSpath);
 					} else if (total == 0) System.out.println("***** There are no users *****");
@@ -257,6 +260,7 @@ public class RunWSClient {
 
 			try {
 				answer = reader.readLine();
+				if (answer.equals("")) answer = "100";									
 			} catch (IOException e) {
 				System.out.println("Error reading input.");
 				answer = "100";
@@ -371,6 +375,7 @@ public class RunWSClient {
 
 			try {
 				answer = reader.readLine();
+				if (answer.equals("")) answer = "100";									
 			} catch (IOException e) {
 				System.out.println("Error reading input.");
 				answer = "100";
@@ -477,6 +482,7 @@ public class RunWSClient {
 
 			try {
 				answer = reader.readLine();
+				if (answer.equals("")) answer = "100";									
 			} catch (IOException e) {
 				System.out.println("Error reading input.");
 				answer = "100";
@@ -590,6 +596,7 @@ public class RunWSClient {
 
 			try {
 				answer = reader.readLine();
+				if (answer.equals("")) answer = "100";									
 			} catch (IOException e) {
 				System.out.println("Error reading input.");
 				answer = "100";
