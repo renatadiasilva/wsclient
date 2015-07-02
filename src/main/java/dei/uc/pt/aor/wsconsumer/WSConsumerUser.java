@@ -137,6 +137,9 @@ public class WSConsumerUser {
 		if (response.getStatus() == 304) {
 			System.out.println("\n* There is no user with id/email "+ idemail +" *");
 			return false;
+		} else if (response.getStatus() == 598) {
+				System.out.println("\n* Removal not allowed: the user with id/email "+ idemail +" is logged *");
+				return false;
 		} else if (response.getStatus() != 200) {
 			System.out.println("\nFailed : HTTP error code : "
 					+ response.getStatus());
